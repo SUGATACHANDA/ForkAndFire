@@ -1,0 +1,49 @@
+@media print {
+  html, body {
+    font-family: 'Georgia', serif;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    background: white;
+    color: #222;
+    height: 100%;
+    width: 100%;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  #printable-content,
+  #printable-content * {
+    visibility: visible;
+  }
+
+  #printable-content {
+    width: 750px; /* ⬅️ Fixed printable width (standard A4 ~ 794px) */
+    margin: 0 auto; /* ⬅️ Centers the content */
+    background-color: white !important;
+    padding: 0;
+    transform: scale(1); /* No scaling needed if within 750px */
+    transform-origin: top center;
+  }
+
+  #printable-content p,
+  #printable-content li {
+    text-align: justify;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  section, header, footer, article, div {
+    page-break-inside: avoid !important;
+  }
+  #printable-content p.author {
+    text-align: center !important;
+  }
+  table, th, td {
+    text-align: center !important;
+  }
+}
