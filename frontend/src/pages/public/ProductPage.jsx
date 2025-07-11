@@ -104,21 +104,49 @@ const ProductPage = () => {
     const handleBuyNow = async () => {
         if (!userInfo) { navigate('/login', { state: { from: location } }); return; }
         if (isCreatingCheckout || !isPaddleReady) {
-            setCheckoutError("Payment system is still initializing. Please wait a moment.");
+            if (!isPaddleReady) setCheckoutError("Payment system is not loaded yet. Please wait.");
             return;
         }
 
         setIsCreatingCheckout(true);
         setCheckoutError(null);
+
         try {
+            // 1. Get the transaction ID from our backend (no change here).
             const { data } = await API.post(`/api/products/${id}/checkout`, { quantity });
-            if (data?.transactionId) {
-                window.Paddle.Checkout.open({ transactionId: data.transactionId });
+
+            if (data && data.transactionId) {
+                // --- THE DEFINITIVE FIX IS HERE ---
+
+                // 2. We now do the full setup and open inside the click handler.
+                // This completely bypasses the problematic `Paddle.Initialize` call.
+                if (window.Paddle) {
+
+                    // A. Set the environment directly.
+                    window.Paddle.Environment.set(import.meta.env.VITE_NODE_ENV === 'production' ? 'live' : 'sandbox');
+
+                    // B. Call Checkout.open with ALL necessary details inline.
+                    window.Paddle.Checkout.open({
+                        transactionId: data.transactionId,
+                        // Provide the token DIRECTLY here.
+                        token: import.meta.env.VITE_PADDLE_CLIENT_SIDE_TOKEN,
+                        eventCallback: (eventData) => {
+                            if (eventData.name === 'checkout.completed') {
+                                const transactionId = eventData.data?.id || eventData.data?.transaction_id;
+                                console.log(`Purchase complete! ID: ${transactionId}. Redirecting...`);
+                                // Navigate to your success/orders page
+                                navigate(`/my-orders?purchase=success`);
+                            }
+                        }
+                    });
+                } else {
+                    throw new Error("Paddle.js failed to load on the window object.");
+                }
             } else {
-                throw new Error("Could not get a valid transaction from the server.");
+                throw new Error("Did not receive a valid transaction from the server.");
             }
         } catch (err) {
-            setCheckoutError(err.response?.data?.message || err.message || 'An unexpected error occurred.');
+            setCheckoutError(err.response?.data?.message || err.message || 'Could not initiate purchase.');
         } finally {
             setIsCreatingCheckout(false);
         }
