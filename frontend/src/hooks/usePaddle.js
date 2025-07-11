@@ -116,85 +116,120 @@
 //     return isPaddleReady;
 // };
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+
+// This is the function that holds the core setup logic.
+// We keep it outside the hook to make it clear and reusable if needed.
+const initializePaddle = (onCheckoutComplete) => {
+    // Safety check: ensure we don't try to run this in a server-side environment.
+    if (typeof window === 'undefined' || !window.document) {
+        return;
+    }
+
+    // Check if the global Paddle object exists AND it has not already been initialized.
+    if (window.Paddle && !window.Paddle.isSetup) {
+
+        const clientToken = import.meta.env.VITE_PADDLE_CLIENT_SIDE_TOKEN;
+
+        // A critical guard clause to ensure the .env variable is loaded.
+        if (!clientToken) {
+            console.error("FATAL ERROR: VITE_PADDLE_CLIENT_SIDE_TOKEN is not defined in /frontend/.env. Paddle cannot be initialized.");
+            return;
+        }
+
+        try {
+            console.log("Attempting to initialize Paddle Billing...");
+
+            // Step 1: Set the environment ('sandbox' for development, 'live' for production).
+            window.Paddle.Environment.set(
+                import.meta.env.MODE === 'production' ? 'live' : 'sandbox'
+            );
+
+            // Step 2: Initialize with your public Client-side Token and the event callback.
+            window.Paddle.Initialize({
+                token: clientToken,
+                eventCallback: (data) => {
+                    // We listen for the event that signifies a successful transaction.
+                    if (data.name === 'checkout.completed') {
+                        // If a callback function was provided to the hook, call it with the event data.
+                        if (onCheckoutComplete) {
+                            onCheckoutComplete(data.data);
+                        }
+                    }
+                }
+            });
+
+            // Set our own custom flag on the window object to prevent this from ever running again.
+            window.Paddle.isSetup = true;
+            console.log("✅ Paddle Initialized successfully.");
+
+        } catch (e) {
+            console.error("PADDLE INITIALIZATION FAILED:", e);
+        }
+    }
+};
 
 /**
- * A custom React hook to reliably load the Paddle.js script and report its readiness.
- *
- * This version uses the "Bypass" strategy: It does NOT call Paddle.Initialize().
- * Its only job is to load the script and confirm that the `window.Paddle` object exists.
- * The responsibility of initializing the environment and opening the checkout is
- * moved to the component that calls this hook (e.g., ProductPage.jsx).
- * This is the most robust method for avoiding specific initialization errors like the
- * 'profitwellSnippetBase' bug.
- *
- * @returns {boolean} A stateful boolean that is `true` only when the Paddle.js script has fully loaded.
+ * A custom React hook that waits for the Paddle.js script (loaded from index.html)
+ * to be ready, initializes it for Paddle Billing, and returns its readiness state.
  */
-export const usePaddle = () => {
-    // This state simply tracks if `window.Paddle` is available.
-    const [isPaddleReady, setIsPaddleReady] = useState(!!window.Paddle);
+export const usePaddle = (onCheckoutComplete) => {
+    // This state tells the consuming component whether the 'Buy Now' button should be active.
+    const [isPaddleReady, setIsPaddleReady] = useState(window.Paddle?.isSetup || false);
+
+    // Memoize the callback to create a stable function reference for the useEffect hook.
+    const memoizedOnCheckoutComplete = useCallback(onCheckoutComplete, [onCheckoutComplete]);
 
     useEffect(() => {
-        // If Paddle is already ready (e.g., from a previous page navigation), do nothing.
+        // If our state already shows that Paddle is ready, there's nothing more to do.
         if (isPaddleReady) {
             return;
         }
 
-        const scriptId = 'paddle-js-script';
-        let script = document.getElementById(scriptId);
+        // --- Polling mechanism: a robust way to wait for an external script ---
 
-        // This function will run once the script successfully loads.
-        const onScriptLoad = () => {
-            console.log("✅ Paddle.js script has loaded and window.Paddle is now available.");
-            // Update our state to signal readiness to all consuming components.
-            setIsPaddleReady(true);
-        };
-
-        const onScriptError = () => {
-            console.error("Fatal Error: Failed to load the Paddle.js script from CDN. Check network or ad-blockers.");
-            setIsPaddleReady(false); // Ensure readiness is false on error.
-        };
-
-
-        if (script) {
-            // If the script tag is already in the DOM from a previous hook usage or from index.html...
-            // We check its readyState to see if it has already loaded.
-            if (script.readyState) { // For older IE browsers
-                script.onreadystatechange = () => {
-                    if (script.readyState === "loaded" || script.readyState === "complete") {
-                        script.onreadystatechange = null;
-                        onScriptLoad();
-                    }
-                };
-            } else { // For modern browsers
-                script.addEventListener('load', onScriptLoad);
-                script.addEventListener('error', onScriptError);
+        // This function attempts to run the initialization.
+        const trySetup = () => {
+            // We check for window.Paddle. If it exists, we run the setup.
+            if (window.Paddle) {
+                initializePaddle(memoizedOnCheckoutComplete);
+                // If the setup function successfully ran, `isSetup` will be true.
+                if (window.Paddle.isSetup) {
+                    setIsPaddleReady(true);
+                }
             }
-        } else {
-            // If the script tag does not exist, create it.
-            script = document.createElement('script');
-            script.id = scriptId;
-            script.src = 'https://cdn.paddle.com/paddle.js';
-            script.async = true;
+        };
 
-            // Attach our onload and onerror handlers.
-            script.addEventListener('load', onScriptLoad);
-            script.addEventListener('error', onScriptError);
+        // Try to set up immediately in case the script was already cached by the browser.
+        trySetup();
 
-            // Append the script to the body to start downloading.
-            document.body.appendChild(script);
-        }
+        // Set up an interval to check every 200ms if the script has loaded.
+        const intervalId = setInterval(() => {
+            // If we successfully set up, we can clear this interval.
+            if (window.Paddle?.isSetup) {
+                clearInterval(intervalId);
+                setIsPaddleReady(true); // Final state update just in case.
+                return;
+            }
+            trySetup(); // Otherwise, try again.
+        }, 200);
 
-        // --- Cleanup Function ---
-        // This runs when the component that uses this hook unmounts.
+        // Failsafe: Stop polling after a reasonable time (e.g., 10 seconds).
+        const timeoutId = setTimeout(() => {
+            clearInterval(intervalId);
+            if (!window.Paddle?.isSetup) {
+                console.error("Paddle.js did not load after 10 seconds. Check script in index.html and network connection.");
+            }
+        }, 10000);
+
+        // Cleanup function: This is crucial to prevent memory leaks when the component unmounts.
         return () => {
-            if (script) {
-                script.removeEventListener('load', onScriptLoad);
-                script.removeEventListener('error', onScriptError);
-            }
+            clearInterval(intervalId);
+            clearTimeout(timeoutId);
         };
 
-    }, [isPaddleReady]); // The effect depends on the readiness state.
+    }, [isPaddleReady, memoizedOnCheckoutComplete]);
 
+    // Return the simple boolean readiness status.
     return isPaddleReady;
 };

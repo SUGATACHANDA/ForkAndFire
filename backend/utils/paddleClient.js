@@ -1,7 +1,7 @@
 // const axios = require('axios');
-const dotenv = require('dotenv');
+// const dotenv = require('dotenv');
 
-dotenv.config();
+// dotenv.config();
 
 // if (!process.env.PADDLE_API_KEY) {
 //     throw new Error('FATAL ERROR: PADDLE_API_KEY is not defined.');
@@ -27,48 +27,35 @@ dotenv.config();
 
 const axios = require('axios');
 
-// --- Validate ALL required environment variables on startup ---
+// Validate ALL required environment variables on startup.
 if (!process.env.PADDLE_API_KEY) {
-    throw new Error('FATAL ERROR: PADDLE_API_KEY is not defined in the .env file.');
+    throw new Error('FATAL ERROR: PADDLE_API_KEY is missing in /backend/.env');
 }
 if (!process.env.PADDLE_CLIENT_SIDE_TOKEN) {
-    throw new Error('FATAL ERROR: PADDLE_CLIENT_SIDE_TOKEN is not defined in the .env file.');
+    throw new Error('FATAL ERROR: PADDLE_CLIENT_SIDE_TOKEN is missing in /backend/.env');
 }
-
 
 const paddleApi = axios.create({
     baseURL: process.env.NODE_ENV === 'production'
         ? 'https://api.paddle.com'
         : 'https://sandbox-api.paddle.com',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    timeout: 10000,
+    headers: { 'Content-Type': 'application/json' },
+    timeout: 15000,
 });
 
-
-// === THE DEFINITIVE FIX IS IN THIS INTERCEPTOR ===
+// The Axios Interceptor
 paddleApi.interceptors.request.use(
     (config) => {
-        // Get both keys from the environment
+        // === THE FIX IS HERE: Use the correct variable names for the backend environment ===
         const apiKey = process.env.PADDLE_API_KEY;
-        const clientToken = process.env.PADDLE_CLIENT_SIDE_TOKEN;
+        const clientToken = process.env.PADDLE_CLIENT_SIDE_TOKEN; // No VITE_ prefix
 
-        // Attach the secret API key for primary authentication
         config.headers['Authorization'] = `Bearer ${apiKey.trim()}`;
-
-        // ALSO attach the public Client-side Token, which is required for certain API endpoints.
-        config.headers['Paddle-Client-Token'] = clientToken.trim();
-
-        console.log(`🚀 Sending request to Paddle with Authorization and Client-Token headers.`);
+        config.headers['Paddle-Client-Token'] = clientToken.trim(); // Add the required header
 
         return config;
     },
-    (error) => {
-        console.error("Axios Interceptor Setup Error:", error);
-        return Promise.reject(error);
-    }
+    (error) => Promise.reject(error)
 );
-
 
 module.exports = { paddleApi };
