@@ -4,7 +4,6 @@ const User = require('../models/userModel.js');
 // === THE FIX IS HERE: Import the axios instance, not the SDK client ===
 const { paddleApi } = require('../utils/paddleClient.js');
 const { paddleSdk } = require('../utils/paddleSdkClient.js');
-const { nanoid } = require('nanoid');
 
 const mongoose = require('mongoose');
 const Order = require('../models/orderModel.js');
@@ -157,7 +156,7 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
                 return res.status(200).send('Acknowledged: Transaction already processed.');
             }
 
-            const accessToken = nanoid(24);
+
 
             // --- FULFILLMENT LOGIC ---
 
@@ -194,7 +193,7 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
                 purchasePrice: purchasePriceInCents,
                 currency: currencyCode,
                 purchasedAt: new Date(transactionData.billedAt || Date.now()),
-                access_token: accessToken,
+
 
             });
             await newOrder.save();

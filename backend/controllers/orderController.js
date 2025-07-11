@@ -54,7 +54,6 @@ const verifyOrderToken = asyncHandler(async (req, res) => {
 
     // Find the order by its access token and user ownership
     const order = await Order.findOne({
-        access_token: token,
         user: req.user._id,
     }).populate("product", "name imageUrl");
 
@@ -66,7 +65,6 @@ const verifyOrderToken = asyncHandler(async (req, res) => {
     }
 
     // Invalidate the token to make it single-use
-    order.access_token = null;
     order.is_confirmation_viewed = true;
     await order.save();
 

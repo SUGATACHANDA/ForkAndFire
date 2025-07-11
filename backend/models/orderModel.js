@@ -42,7 +42,7 @@ const orderSchema = mongoose.Schema({
         type: Date,
         default: Date.now,
     },
-    access_token: { type: String, unique: true, sparse: true }, // unique & sparse is good for tokens
+    // unique & sparse is good for tokens
     is_confirmation_viewed: { type: Boolean, default: false }
 }, {
     timestamps: true,

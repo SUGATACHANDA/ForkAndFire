@@ -96,11 +96,7 @@ const MyOrdersPage = () => {
                                         <p className="text-sm text-secondary-text mt-1">Purchased: {new Date(order.purchasedAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })} | Total: <span className="font-semibold">{formatPrice(order.purchasePrice, order.currency)}</span> | Quantity: <span className="font-semibold">{order.quantity}</span></p>
                                     </div>
                                     <div className="sm:col-span-1 flex flex-col items-stretch sm:items-end gap-2">
-                                        {/* {order.access_token && !order.is_confirmation_viewed && (
-                                            <Link to={`/purchase-success?order_token=${order.access_token}`} className="w-full text-center bg-green-500 text-white font-semibold text-sm py-2 px-3 rounded-md hover:bg-green-600">
-                                                <FontAwesomeIcon icon={faReceipt} className="mr-2" /> View Details
-                                            </Link>
-                                        )} */}
+
                                         {order.product?.fileUrl && (
                                             <a href={order.product.fileUrl} className="w-full text-center bg-accent text-white font-semibold text-sm py-2 px-3 rounded-md hover:bg-opacity-80">
                                                 <FontAwesomeIcon icon={faDownload} className="mr-2" /> Download
