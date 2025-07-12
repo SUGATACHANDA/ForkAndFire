@@ -237,8 +237,8 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
             // === THE DEFINITIVE FIX IS HERE ===
             // The total amount is at `details.totals.grand_total`.
             // But let's use optional chaining (`?.`) for maximum safety.
-            const purchasePriceInCents = totals?.grandTotal;
-            const currencyCode = totals?.currencyCode;
+            const purchasePriceInCents = details?.totals?.grandTotal;
+            const currencyCode = details?.totals?.currencyCode;
 
             if (purchasePriceInCents === undefined || !currencyCode) {
                 console.error(
@@ -249,15 +249,6 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
                     .send("Acknowledged but cannot process without pricing information.");
             }
 
-            const totals = transactionData.details?.totals;
-            const liveDisplayPrice = totals?.total; // This is the formatted string, e.g., "£28.79"
-
-            // Validate that we have the essential data
-            if (!liveDisplayPrice || !purchasePriceInCents || !currencyCode) {
-                console.error(`Webhook CRITICAL: Transaction ${transactionData.id} missing pricing details.`);
-                return res.status(200).send('Acknowledged, but cannot process without pricing.');
-            }
-
             const newOrder = new Order({
                 user: userId,
                 product: productId,
@@ -266,7 +257,6 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
                 purchasePrice: purchasePriceInCents,
                 currency: currencyCode,
                 purchasedAt: new Date(transactionData.billedAt || Date.now()),
-                displayPrice: liveDisplayPrice,
             });
             await newOrder.save();
             console.log(`- New order record created: ${newOrder._id}`);
@@ -278,39 +268,38 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
             );
 
             try {
-                // Fetch the newly created order AND populate both user and product details.
-                const fullOrderDetails = await Order.findById(newOrder._id)
-                    .populate('user', 'name email')      // <-- Get user's name and email
-                    .populate('product', 'name price'); // <-- Get product's name and price
+                // We must populate the new order with product details to use in the email.
+                const newOrderWithDetails = await Order.findById(newOrder._id)
+                    .populate(
+                        "product",
+                        "name price"
+                    ).populate('user', 'name email'); // Get product name and base price for the email
 
-                // Guard against a rare case where the user or order might not be found.
-                if (!fullOrderDetails || !fullOrderDetails.user || !fullOrderDetails.product) {
-                    throw new Error(`Could not find full order details for order ID ${newOrder._id}`);
+                if (newOrderWithDetails && User) {
+                    // Create the beautiful HTML for the email
+                    const emailHtml = createOrderConfirmationHtml({
+                        recipientName: User.name.split(" ")[0], // Use user's first name
+                        order: newOrderWithDetails,
+                    });
+
+                    // Send the email
+                    await sendEmail({
+                        to: User.email,
+                        subject: `Your Fork & Fire Order Confirmation (Order #${newOrder._id})`,
+                        html: emailHtml,
+                    });
+
+                    console.log(
+                        `- Order confirmation email sent successfully to ${User.email}`
+                    );
                 }
-
-                // Now we have everything we need in one reliable object.
-                const recipientEmail = fullOrderDetails.user.email;
-                const recipientName = fullOrderDetails.user.name.split(' ')[0];
-
-                const emailHtml = createOrderConfirmationHtml({
-                    recipientName: recipientName,
-                    recipientEmail: recipientEmail, // For the unsubscribe link
-                    order: fullOrderDetails,
-                });
-
-                await sendEmail({
-                    to: recipientEmail,
-                    subject: `Your Fork & Fire Order Confirmation (#${newOrder._id.toString().slice(-6)})`,
-                    html: emailHtml,
-                });
-
-                console.log(`- Order confirmation email sent successfully to ${recipientEmail}`);
-
             } catch (emailError) {
-                // Log this specific failure, but don't cause the webhook to fail.
-                console.error("Webhook Fulfillment Warning: Failed to send order confirmation email.", emailError);
+                // Log the error but don't fail the entire webhook process
+                console.error(
+                    "Webhook Fulfillment Warning: Failed to send order confirmation email.",
+                    emailError
+                );
             }
-
         }
         res.sendStatus(200);
     } catch (err) {
