@@ -169,10 +169,7 @@ const initializePaddle = (onCheckoutComplete) => {
     }
 };
 
-/**
- * A custom React hook that waits for the Paddle.js script (loaded from index.html)
- * to be ready, initializes it for Paddle Billing, and returns its readiness state.
- */
+
 export const usePaddle = (onCheckoutComplete) => {
     // This state tells the consuming component whether the 'Buy Now' button should be active.
     const [isPaddleReady, setIsPaddleReady] = useState(window.Paddle?.isSetup || false);
