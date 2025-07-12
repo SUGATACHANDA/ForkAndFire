@@ -280,6 +280,7 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
                     const emailHtml = createOrderConfirmationHtml({
                         recipientName: User.name.split(" ")[0], // Use user's first name
                         order: newOrderWithDetails,
+                        recipientEmail: User.email
                     });
 
                     // Send the email
