@@ -7,7 +7,7 @@ const { paddleSdk } = require("../utils/paddleSdkClient.js");
 
 const mongoose = require("mongoose");
 const Order = require("../models/orderModel.js");
-const sendEmail = require("../utils/sendEmail.js");
+const sendEmail = require("../utils/sendMail.js");
 const createOrderConfirmationHtml = require("../utils/orderConfirmationTemplate.js");
 
 /**

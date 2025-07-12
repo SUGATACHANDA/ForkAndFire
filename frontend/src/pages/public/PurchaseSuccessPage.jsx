@@ -105,7 +105,7 @@ const PurchaseSuccessPage = () => {
                 <>
                     <FontAwesomeIcon icon={faCheckCircle} className="text-6xl text-green-500 mb-6" />
                     <h1 className="text-4xl font-extrabold font-serif text-primary-text">Thank You!</h1>
-                    <p className="text-lg text-secondary-text mt-4">Your purchase of <strong className="text-primary-text">{order.product?.name}</strong> was successful.</p>
+                    <p className="text-lg text-secondary-text mt-4">Your purchase of <strong className="text-primary-text">{order.product?.name}</strong> was successful. An email has been sent to your account.</p>
                 </>
             ) : (
                 <>
