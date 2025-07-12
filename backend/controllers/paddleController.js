@@ -274,7 +274,7 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
                     "name price"
                 ); // Get product name and base price for the email
 
-                if (newOrderWithDetails && user) {
+                if (newOrderWithDetails && User) {
                     // Create the beautiful HTML for the email
                     const emailHtml = createOrderConfirmationHtml({
                         recipientName: User.name.split(" ")[0], // Use user's first name
