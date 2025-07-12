@@ -283,7 +283,7 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
 
                     // Send the email
                     await sendEmail({
-                        to: user.email,
+                        to: User.email,
                         subject: `Your Fork & Fire Order Confirmation (Order #${newOrder._id})`,
                         html: emailHtml,
                     });
