@@ -237,8 +237,8 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
             // === THE DEFINITIVE FIX IS HERE ===
             // The total amount is at `details.totals.grand_total`.
             // But let's use optional chaining (`?.`) for maximum safety.
-            const purchasePriceInCents = details?.totals?.grandTotal;
-            const currencyCode = details?.totals?.currencyCode;
+            const purchasePriceInCents = totals?.grandTotal;
+            const currencyCode = totals?.currencyCode;
 
             if (purchasePriceInCents === undefined || !currencyCode) {
                 console.error(
@@ -249,6 +249,15 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
                     .send("Acknowledged but cannot process without pricing information.");
             }
 
+            const totals = transactionData.details?.totals;
+            const liveDisplayPrice = totals?.total; // This is the formatted string, e.g., "£28.79"
+
+            // Validate that we have the essential data
+            if (!liveDisplayPrice || !purchasePriceInCents || !currencyCode) {
+                console.error(`Webhook CRITICAL: Transaction ${transactionData.id} missing pricing details.`);
+                return res.status(200).send('Acknowledged, but cannot process without pricing.');
+            }
+
             const newOrder = new Order({
                 user: userId,
                 product: productId,
@@ -257,6 +266,7 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
                 purchasePrice: purchasePriceInCents,
                 currency: currencyCode,
                 purchasedAt: new Date(transactionData.billedAt || Date.now()),
+                displayPrice: liveDisplayPrice,
             });
             await newOrder.save();
             console.log(`- New order record created: ${newOrder._id}`);

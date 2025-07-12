@@ -43,7 +43,10 @@ const orderSchema = mongoose.Schema({
         default: Date.now,
     },
     // unique & sparse is good for tokens
-    is_confirmation_viewed: { type: Boolean, default: false }
+    displayPrice: {
+        type: String,
+        required: true
+    },
 }, {
     timestamps: true,
 });
