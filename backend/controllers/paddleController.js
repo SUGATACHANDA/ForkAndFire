@@ -268,37 +268,39 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
             );
 
             try {
-                // We must populate the new order with product details to use in the email.
-                const newOrderWithDetails = await Order.findById(newOrder._id).populate(
-                    "product",
-                    "name price"
-                ); // Get product name and base price for the email
+                // Fetch the newly created order AND populate both user and product details.
+                const fullOrderDetails = await Order.findById(newOrder._id)
+                    .populate('user', 'name email')      // <-- Get user's name and email
+                    .populate('product', 'name price'); // <-- Get product's name and price
 
-                if (newOrderWithDetails && User) {
-                    // Create the beautiful HTML for the email
-                    const emailHtml = createOrderConfirmationHtml({
-                        recipientName: User.name.split(" ")[0], // Use user's first name
-                        order: newOrderWithDetails,
-                    });
-
-                    // Send the email
-                    await sendEmail({
-                        to: User.email,
-                        subject: `Your Fork & Fire Order Confirmation (Order #${newOrder._id})`,
-                        html: emailHtml,
-                    });
-
-                    console.log(
-                        `- Order confirmation email sent successfully to ${User.email}`
-                    );
+                // Guard against a rare case where the user or order might not be found.
+                if (!fullOrderDetails || !fullOrderDetails.user || !fullOrderDetails.product) {
+                    throw new Error(`Could not find full order details for order ID ${newOrder._id}`);
                 }
+
+                // Now we have everything we need in one reliable object.
+                const recipientEmail = fullOrderDetails.user.email;
+                const recipientName = fullOrderDetails.user.name.split(' ')[0];
+
+                const emailHtml = createOrderConfirmationHtml({
+                    recipientName: recipientName,
+                    recipientEmail: recipientEmail, // For the unsubscribe link
+                    order: fullOrderDetails,
+                });
+
+                await sendEmail({
+                    to: recipientEmail,
+                    subject: `Your Fork & Fire Order Confirmation (#${newOrder._id.toString().slice(-6)})`,
+                    html: emailHtml,
+                });
+
+                console.log(`- Order confirmation email sent successfully to ${recipientEmail}`);
+
             } catch (emailError) {
-                // Log the error but don't fail the entire webhook process
-                console.error(
-                    "Webhook Fulfillment Warning: Failed to send order confirmation email.",
-                    emailError
-                );
+                // Log this specific failure, but don't cause the webhook to fail.
+                console.error("Webhook Fulfillment Warning: Failed to send order confirmation email.", emailError);
             }
+
         }
         res.sendStatus(200);
     } catch (err) {
