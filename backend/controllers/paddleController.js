@@ -308,11 +308,11 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
                 const adminEmail = process.env.ADMIN_EMAIL_ADDRESS;
 
                 const adminEmailHtml = createAdminOrderNotificationHtml({
-                    order: fullOrderDetails,
+                    order: orderForEmail,
                 });
                 await sendEmail({
                     to: adminEmail,
-                    subject: `🎉 New Order! - ${fullOrderDetails.product.name} (x${fullOrderDetails.quantity})`,
+                    subject: `🎉 New Order! - ${orderForEmail.product.name} (x${orderForEmail.quantity})`,
                     html: adminEmailHtml,
                 }).catch((adminEmailError) => {
                     // Catch email errors but don't fail the webhook
