@@ -82,7 +82,7 @@ const createOrderConfirmationHtml = ({ recipientName, recipientEmail, order }) =
                                                         <p style="font-size:14px; color:#718096; margin:4px 0 0 0;">Quantity: ${order.quantity}</p>
                                                     </td>
                                                     <td align="right" style="font-size:16px; font-weight:600; color:#2c3e50;">
-                                                        ${formatPrice(order.product?.price * 100 * order.quantity, order.currency)}
+                                                        ${formatPrice(order.product?.price * 100 * order.quantity, order.product.currency)}
                                                     </td>
                                                 </tr>
                                             </table>
@@ -96,7 +96,7 @@ const createOrderConfirmationHtml = ({ recipientName, recipientEmail, order }) =
                                                         <p style="font-size:18px; font-weight:bold; color:#2c3e50; margin:0;" class="playfair">Grand Total</p>
                                                     </td>
                                                     <td align="right" style="font-size:20px; font-weight:bold; color:#2c3e50;">
-                                                        ${formatPrice(finalPrice)}
+                                                        ${formatPrice(finalPrice, order.currency)}
                                                     </td>
                                                 </tr>
                                             </table>
