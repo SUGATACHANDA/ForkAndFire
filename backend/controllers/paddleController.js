@@ -9,6 +9,7 @@ const mongoose = require("mongoose");
 const Order = require("../models/orderModel.js");
 const sendEmail = require("../utils/sendMail.js");
 const createOrderConfirmationHtml = require("../utils/orderConfirmationTemplate.js");
+const createAdminOrderNotificationHtml = require('../utils/adminOrderNotificationTemplate.js');
 
 /**
  * @desc    Creates a Paddle Transaction and returns its ID for an Inline Checkout.
