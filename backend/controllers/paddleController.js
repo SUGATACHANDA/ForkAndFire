@@ -281,13 +281,20 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
             // C. Update the User with their Paddle Customer ID
             if (user && user.email) {
                 // Repopulate the new order with product details for the email template
-                const orderForEmail = await newOrder.populate("product", "name price").populate('user', 'name email');
+                const fullOrderDetails = await Order.findById(newOrder._id)
+                    .populate('user', 'name email')
+                    .populate('product', 'name price');
+
+                // If this critical data is missing, we can't send any emails.
+                if (!fullOrderDetails?.user?.email) {
+                    throw new Error(`User data or email not found for order ${newOrder._id}`);
+                }
 
                 // Explicitly create the HTML content
                 const customerEmailHtml = createOrderConfirmationHtml({
                     recipientName: user.name.split(" ")[0] || "there",
                     recipientEmail: user.email, // <-- Pass the now guaranteed-to-exist email
-                    order: orderForEmail,
+                    order: fullOrderDetails,
                 });
 
                 // Send the email
@@ -308,7 +315,7 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
                 const adminEmail = process.env.ADMIN_EMAIL_ADDRESS;
 
                 const adminEmailHtml = createAdminOrderNotificationHtml({
-                    order: orderForEmail,
+                    order: fullOrderDetails,
                 });
                 await sendEmail({
                     to: adminEmail,
