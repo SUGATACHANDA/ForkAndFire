@@ -92,7 +92,7 @@ const createOrderConfirmationHtml = ({ recipientName, recipientEmail, order }) =
                                             <table width="100%">
                                                 <tr>
                                                     <td>
-                                                        <p style="font-size:18px; font-weight:bold; color:#2c3e50; margin:0;" class="playfair">Grand Total</p>
+                                                        <p style="font-size:18px; font-weight:bold; color:#2c3e50; margin:0;" class="playfair">Grand Total (in Local Price)</p>
                                                     </td>
                                                     <td align="right" style="font-size:20px; font-weight:bold; color:#2c3e50;">
                                                         ${formatPrice(finalPrice, order.currency)}
