@@ -196,7 +196,8 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
             if (
                 !customData?.userId ||
                 !customData?.productId ||
-                !customData?.quantity
+                !customData?.quantity ||
+                !transactionData.customerId
             ) {
                 return res
                     .status(200)
@@ -220,16 +221,27 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
             // --- FULFILLMENT LOGIC ---
 
             // A. Decrement stock
-            const updatedProduct = await Product.findOneAndUpdate(
-                { _id: productId, amountLeft: { $gte: quantity } },
-                { $inc: { amountLeft: -quantity } },
-                { new: true }
-            );
+            const [updatedProduct, user] = await Promise.all([
+                // Decrement stock
+                Product.findOneAndUpdate(
+                    { _id: productId, amountLeft: { $gte: quantity } },
+                    { $inc: { amountLeft: -quantity } }
+                ),
+                // Find the user who made the purchase
+                User.findById(userId),
+            ]);
             if (!updatedProduct) {
                 console.error(
                     `Webhook CRITICAL: Stock update failed for product ${productId}. REFUND MAY BE REQUIRED.`
                 );
                 return res.status(200).send("Acknowledged, stock conflict detected.");
+            }
+
+            if (!user) {
+                console.error(
+                    `Webhook CRITICAL: User ${userId} not found. Cannot send email or update customer ID.`
+                );
+                // We might still create the order but can't email
             }
 
             // B. Create a new Order document
@@ -244,14 +256,18 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
 
             // Validate that we have the essential data
             if (!liveDisplayPrice || !purchasePriceInCents || !currencyCode) {
-                console.error(`Webhook CRITICAL: Transaction ${transactionData.id} missing pricing details.`);
-                return res.status(200).send('Acknowledged, but cannot process without pricing.');
+                console.error(
+                    `Webhook CRITICAL: Transaction ${transactionData.id} missing pricing details.`
+                );
+                return res
+                    .status(200)
+                    .send("Acknowledged, but cannot process without pricing.");
             }
 
             const newOrder = new Order({
                 user: userId,
                 product: productId,
-                paddleTransactionId,
+                paddleTransactionId: transactionData.id,
                 quantity,
                 purchasePrice: purchasePriceInCents,
                 currency: currencyCode,
@@ -262,46 +278,46 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
             console.log(`- New order record created: ${newOrder._id}`);
 
             // C. Update the User with their Paddle Customer ID
-            await User.updateOne({ _id: userId }, { $set: { paddleCustomerId } });
-            console.log(
-                `- User ${userId} paddleCustomerId updated to ${paddleCustomerId}.`
-            );
+            if (user && user.email) {
+                // Repopulate the new order with product details for the email template
+                const orderForEmail = await newOrder.populate("product", "name price");
 
-            try {
-                // We must populate the new order with product details to use in the email.
-                const newOrderWithDetails = await Order.findById(newOrder._id)
-                    .populate(
-                        "product",
-                        "name price"
-                    ).populate('user', 'name email'); // Get product name and base price for the email
+                // Explicitly create the HTML content
+                const emailHtml = createOrderConfirmationHtml({
+                    recipientName: user.name.split(" ")[0] || "there",
+                    recipientEmail: user.email, // <-- Pass the now guaranteed-to-exist email
+                    order: orderForEmail,
+                });
 
-                if (newOrderWithDetails && User) {
-                    // Create the beautiful HTML for the email
-                    const emailHtml = createOrderConfirmationHtml({
-                        recipientName: User.name.split(" ")[0], // Use user's first name
-                        order: newOrderWithDetails,
-                        recipientEmail: User.email
-                    });
-
-                    // Send the email
-                    await sendEmail({
-                        to: User.email,
-                        subject: `Your Fork & Fire Order Confirmation (Order #${newOrder._id})`,
-                        html: emailHtml,
-                    });
-
-                    console.log(
-                        `- Order confirmation email sent successfully to ${User.email}`
+                // Send the email
+                await sendEmail({
+                    to: user.email,
+                    subject: `Your Fork & Fire Order Confirmation (#${newOrder._id
+                        .toString()
+                        .slice(-6)})`,
+                    html: emailHtml,
+                }).catch((emailError) => {
+                    // Catch email errors but don't fail the webhook
+                    console.error(
+                        "Webhook Fulfillment Warning: Failed to send confirmation email.",
+                        emailError
                     );
-                }
-            } catch (emailError) {
-                // Log the error but don't fail the entire webhook process
-                console.error(
-                    "Webhook Fulfillment Warning: Failed to send order confirmation email.",
-                    emailError
+                });
+            } else {
+                console.warn(
+                    `- Could not send confirmation email because user or user email was not found for userId: ${userId}`
                 );
             }
+
+            // 7. Update Paddle Customer ID on the user record if the user was found.
+            if (user) {
+                user.paddleCustomerId = transactionData.customer_id;
+                await user.save();
+                console.log(`- User ${userId} paddleCustomerId updated.`);
+            }
         }
+
+        // Final "OK" to Paddle
         res.sendStatus(200);
     } catch (err) {
         console.error("❌ WEBHOOK ERROR:", err.message);
