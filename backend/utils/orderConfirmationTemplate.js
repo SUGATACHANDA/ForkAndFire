@@ -76,7 +76,7 @@ const createOrderConfirmationHtml = ({ recipientName, recipientEmail, order }) =
                                             <!-- Item Row -->
                                             <table width="100%">
                                                 <tr>
-                                                    <td width="80"><img src="${order.product?.imageUrl || ''}" alt="${order.product?.name}" width="64" style="border-radius:6px;"/></td>
+                                                    <td width="80"><img src="${order.product.imageUrl || ''}" alt="${order.product.name}" width="64" style="border-radius:6px;"/></td>
                                                     <td>
                                                         <p style="font-size:16px; font-weight:600; color:#2c3e50; margin:0;">${order.product?.name}</p>
                                                         <p style="font-size:14px; color:#718096; margin:4px 0 0 0;">Quantity: ${order.quantity}</p>
