@@ -269,9 +269,9 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
                 product: productId,
                 paddleTransactionId: transactionData.id,
                 quantity,
-                purchasePrice: transactionData.details.totals.grandTotal,
-                currency: transactionData.details.totals.currencyCode,
-                displayPrice: transactionData.details.lineItems[0]?.formatted_totals?.total,
+                purchasePrice: purchasePriceInCents,
+                currency: currencyCode,
+                displayPrice: liveDisplayPrice,
                 purchasedAt: new Date(transactionData.billedAt || Date.now()),
             });
             await newOrder.save();
