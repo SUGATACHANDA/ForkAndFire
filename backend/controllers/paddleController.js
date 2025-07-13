@@ -196,7 +196,7 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
             const billingDetails = transactionData.details;
 
             if (!userId || !productId || !quantity) {
-                return res.status(200).send('Acknowledged: Missing custom data.');
+                return res.status(200).send('Acknowledge: Missing custom data.');
             }
 
             // 3. Prevent duplicate processing
