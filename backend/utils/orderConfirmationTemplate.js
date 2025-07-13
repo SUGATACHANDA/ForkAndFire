@@ -7,28 +7,22 @@
  * @param {object} options.order - The full, populated Order document.
  * @returns {string} The complete HTML email content.
  */
-const createOrderConfirmationHtml = ({
-    recipientName,
-    recipientEmail,
-    order,
-}) => {
-    const siteUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+const createOrderConfirmationHtml = ({ recipientName, recipientEmail, order }) => {
+    const siteUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
     const currentYear = new Date().getFullYear();
-    const orderDate = new Date(order.purchasedAt).toLocaleDateString("en-US", {
-        dateStyle: "long",
-    });
+    const orderDate = new Date(order.purchasedAt).toLocaleDateString('en-US', { dateStyle: 'long' });
 
     const formatPrice = (amount, currency) => {
-        return new Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: currency || "USD",
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: currency || 'USD',
         }).format((amount || 0) / 100);
     };
 
     // We no longer need a formatPrice helper because Paddle gives us the final string.
     const finalPrice = order.displayPrice;
 
-    const encodedEmail = Buffer.from(recipientEmail).toString("base64");
+    const encodedEmail = Buffer.from(recipientEmail).toString('base64');
     const unsubscribeUrl = `${siteUrl}/unsubscribe?token=${encodedEmail}`;
 
     return `
@@ -81,44 +75,13 @@ const createOrderConfirmationHtml = ({
                                             
                                             <!-- Item Row -->
                                             <table width="100%">
-                                                <tr>
-                                                    <td width="80"><img 
-                                                                src="${order.product
-            ?.imageUrl ||
-        ""
-        }" 
-                                                                alt="${order.product
-            ?.name ||
-        "Product Image"
-        }" 
-                                                                width="64" height="64"
-                                                                style="
-                                                                    display: block; 
-                                                                    width: 64px; 
-                                                                    height: 64px;
-                                                                    border-radius: 6px;
-                                                                    object-fit: cover;                                                                    
-                                                                    font-family: Arial, sans-serif;
-                                                                    font-size: 12px;
-                                                                    color: #888888;
-                                                                    background-color: #f0f2f5;
-                                                                    text-align: center;
-                                                                    line-height: 64px;
-                                                                "
-                                                            /></td>
+                                                <tr>                                                    
                                                     <td>
-                                                        <p style="font-size:16px; font-weight:600; color:#2c3e50; margin:0;">${order.product?.name
-        }</p>
-                                                        <p style="font-size:14px; color:#718096; margin:4px 0 0 0;">Quantity: ${order.quantity
-        }</p>
+                                                        <p style="font-size:16px; font-weight:600; color:#2c3e50; margin:0;">${order.product?.name}</p>
+                                                        <p style="font-size:14px; color:#718096; margin:4px 0 0 0;">Quantity: ${order.quantity}</p>
                                                     </td>
                                                     <td align="right" style="font-size:16px; font-weight:600; color:#2c3e50;">
-                                                        ${formatPrice(
-            order.product?.price *
-            100 *
-            order.quantity,
-            order.product.currency
-        )}
+                                                        ${formatPrice(order.product?.price * 100 * order.quantity, order.product.currency)}
                                                     </td>
                                                 </tr>
                                             </table>
@@ -132,10 +95,7 @@ const createOrderConfirmationHtml = ({
                                                         <p style="font-size:18px; font-weight:bold; color:#2c3e50; margin:0;" class="playfair">Grand Total</p>
                                                     </td>
                                                     <td align="right" style="font-size:20px; font-weight:bold; color:#2c3e50;">
-                                                        ${formatPrice(
-            finalPrice,
-            order.currency
-        )}
+                                                        ${formatPrice(finalPrice, order.currency)}
                                                     </td>
                                                 </tr>
                                             </table>
