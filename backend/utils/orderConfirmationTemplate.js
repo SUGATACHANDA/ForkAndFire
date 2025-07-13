@@ -12,6 +12,13 @@ const createOrderConfirmationHtml = ({ recipientName, recipientEmail, order }) =
     const currentYear = new Date().getFullYear();
     const orderDate = new Date(order.purchasedAt).toLocaleDateString('en-US', { dateStyle: 'long' });
 
+    const formatPrice = (amount, currency) => {
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: currency || 'USD',
+        }).format((amount || 0) / 100);
+    };
+
     // We no longer need a formatPrice helper because Paddle gives us the final string.
     const finalPrice = order.displayPrice;
 
@@ -75,7 +82,7 @@ const createOrderConfirmationHtml = ({ recipientName, recipientEmail, order }) =
                                                         <p style="font-size:14px; color:#718096; margin:4px 0 0 0;">Quantity: ${order.quantity}</p>
                                                     </td>
                                                     <td align="right" style="font-size:16px; font-weight:600; color:#2c3e50;">
-                                                        ${finalPrice}
+                                                        ${formatPrice(order.product?.price * 100 * order.quantity, order.currency)}
                                                     </td>
                                                 </tr>
                                             </table>
@@ -89,7 +96,7 @@ const createOrderConfirmationHtml = ({ recipientName, recipientEmail, order }) =
                                                         <p style="font-size:18px; font-weight:bold; color:#2c3e50; margin:0;" class="playfair">Grand Total</p>
                                                     </td>
                                                     <td align="right" style="font-size:20px; font-weight:bold; color:#2c3e50;">
-                                                        ${finalPrice}
+                                                        ${formatPrice(finalPrice)}
                                                     </td>
                                                 </tr>
                                             </table>
