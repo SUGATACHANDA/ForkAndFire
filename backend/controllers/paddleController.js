@@ -281,7 +281,7 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
             // C. Update the User with their Paddle Customer ID
             if (user && user.email) {
                 // Repopulate the new order with product details for the email template
-                const orderForEmail = await newOrder.populate("product", "name price");
+                const orderForEmail = await newOrder.populate("product", "name price").populate('user', 'name email');
 
                 // Explicitly create the HTML content
                 const customerEmailHtml = createOrderConfirmationHtml({
