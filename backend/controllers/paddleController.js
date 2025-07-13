@@ -283,7 +283,7 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
                 const orderForEmail = await newOrder.populate("product", "name price");
 
                 // Explicitly create the HTML content
-                const emailHtml = createOrderConfirmationHtml({
+                const customerEmailHtml = createOrderConfirmationHtml({
                     recipientName: user.name.split(" ")[0] || "there",
                     recipientEmail: user.email, // <-- Pass the now guaranteed-to-exist email
                     order: orderForEmail,
@@ -295,14 +295,32 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
                     subject: `Your Fork & Fire Order Confirmation (#${newOrder._id
                         .toString()
                         .slice(-6)})`,
-                    html: emailHtml,
-                }).catch((emailError) => {
+                    html: customerEmailHtml,
+                }).catch((customerEmailError) => {
                     // Catch email errors but don't fail the webhook
                     console.error(
                         "Webhook Fulfillment Warning: Failed to send confirmation email.",
-                        emailError
+                        customerEmailError
                     );
                 });
+
+                const adminEmail = process.env.ADMIN_EMAIL_ADDRESS;
+
+                const adminEmailHtml = createAdminOrderNotificationHtml({
+                    order: fullOrderDetails,
+                });
+                await sendEmail({
+                    to: adminEmail,
+                    subject: `🎉 New Order! - ${fullOrderDetails.product.name} (x${fullOrderDetails.quantity})`,
+                    html: adminEmailHtml,
+                }).catch((adminEmailError) => {
+                    // Catch email errors but don't fail the webhook
+                    console.error(
+                        "Webhook Fulfillment Warning: Failed to send confirmation email.",
+                        adminEmailError
+                    );
+                });
+
             } else {
                 console.warn(
                     `- Could not send confirmation email because user or user email was not found for userId: ${userId}`
