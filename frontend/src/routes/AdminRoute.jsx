@@ -10,7 +10,7 @@ const AdminRoute = () => {
         return <Loader />;
     }
 
-    return userInfo && userInfo.isAdmin ? <Outlet /> : <Navigate to="/login" replace />;
+    return userInfo && userInfo.isAdmin ? <Outlet /> : <Navigate to="/login" replace state={{ from: location }} />;
 };
 
 export default AdminRoute;
