@@ -129,6 +129,7 @@ const createTransactionForCheckout = asyncHandler(async (req, res) => {
                 userId: user._id.toString(),
                 productId: product._id.toString(),
                 quantity: parseInt(quantity, 10) || 1,
+                isCartCheckout: false
             },
         };
 
@@ -167,6 +168,7 @@ const createTransactionForCheckout = asyncHandler(async (req, res) => {
                 userId: user._id.toString(),
                 productId: product._id.toString(),
                 quantity: parseInt(quantity, 10) || 1,
+                isCartCheckout: false
             },
         };
 
