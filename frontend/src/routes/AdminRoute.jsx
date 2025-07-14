@@ -1,10 +1,10 @@
-import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import Loader from '../components/common/Loader';
 
 const AdminRoute = () => {
     const { userInfo, loading } = useAuth();
+    const location = useLocation();
 
     if (loading) {
         return <Loader />;
