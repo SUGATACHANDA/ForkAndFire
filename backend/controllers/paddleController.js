@@ -202,6 +202,7 @@ const createTransactionForCheckout = asyncHandler(async (req, res) => {
     }
 });
 
+
 /**
  * @desc    Handles incoming webhooks from Paddle.
  * @note    Webhook verification without the SDK is complex and requires manual
@@ -521,5 +522,5 @@ module.exports = {
     handlePaddleWebhook,
     getLivePrice,
     previewPrice,
-
+    createCartCheckout
 };
