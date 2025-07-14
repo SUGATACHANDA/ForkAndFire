@@ -15,39 +15,35 @@ const createCustomerConfirmationHtml = require('../utils/customerOrderTemplate.j
 const createCartCheckout = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id).populate('cart.product');
 
-    if (!user.cart || user.cart.length === 0) {
-        res.status(400); throw new Error('Your cart is empty.');
-    }
-
-    // Check if any item in the cart has insufficient stock
-    for (const item of user.cart) {
-        if (item.quantity > item.product.amountLeft) {
-            res.status(400);
-            throw new Error(`Not enough stock for "${item.product.name}". Only ${item.product.amountLeft} available.`);
-        }
-    }
+    if (!user.cart || user.cart.length === 0) throw new Error('Your cart is empty.');
 
     try {
-        // Create a list of items for the Paddle transaction
-        const transactionItems = user.cart.map(item => ({
-            priceId: item.product.paddlePriceId,
-            quantity: item.quantity,
-        }));
+        console.log(`🚀 Creating Pay Link for user's CART: ${user.email}`);
 
-        const transaction = await paddle.transactions.create({
-            items: transactionItems,
-            customerId: user.paddleCustomerId,
-            customData: {
+        const payLink = await paddleSdk.links.create({
+            items: user.cart.map(item => ({
+                priceId: item.product.paddlePriceId,
+                quantity: item.quantity
+            })),
+            custom_data: {
                 userId: user._id.toString(),
-                isCartCheckout: true, // A flag to identify a cart purchase in the webhook
-                // We pass the cart content for the webhook to process
-                cart: user.cart.map(item => ({ productId: item.product._id, quantity: item.quantity })),
-            }
+                isCartCheckout: true,
+                cart: user.cart.map(item => ({
+                    productId: item.product._id.toString(),
+                    quantity: item.quantity
+                }))
+            },
+            customer_email: user.email,
         });
 
-        res.status(200).json({ transactionId: transaction.id });
+        const checkoutUrl = payLink.url;
+        if (!checkoutUrl) throw new Error('Could not generate cart checkout link.');
+
+        console.log(`✅ Cart Pay Link created: ${checkoutUrl}`);
+        res.status(200).json({ checkoutUrl });
+
     } catch (paddleError) {
-        console.error("PADDLE CART CHECKOUT ERROR:", paddleError);
+        console.error("❌ PADDLE CART PAY LINK ERROR:", paddleError.message);
         res.status(500).json({ message: "Could not create cart checkout session." });
     }
 });
@@ -58,147 +54,38 @@ const createCartCheckout = asyncHandler(async (req, res) => {
  * @access  Private
  */
 const createTransactionForCheckout = asyncHandler(async (req, res) => {
-    // === THE FIX: Use `req.params.id` which matches the route definition ===
-    const { id: productId } = req.params;
-    const { quantity } = req.body;
+    const { productId, quantity } = req.body;
     const user = req.user;
 
-    console.log(
-        `[Step 1] Initiating checkout for local Product ID: ${productId}`
-    );
-
-    // --- Validation ---
-    if (!productId.match(/^[0-9a-fA-F]{24}$/)) {
-        res.status(400); // Bad Request
-        throw new Error("The provided product ID is invalid.");
-    }
-
     const product = await Product.findById(productId);
-    if (!product) {
-        res.status(404);
-        throw new Error("Product not found in our database.");
-    }
-    if (!product.paddlePriceId) {
-        res.status(500);
-        throw new Error(
-            "This product is not configured for payments on the server."
-        );
-    }
-    if (quantity > product.amountLeft) {
-        res.status(400);
-        throw new Error(`Only ${product.amountLeft} items are in stock.`);
-    }
+    if (!product || !product.paddlePriceId) throw new Error('Product not configured.');
+    if (quantity > product.amountLeft) throw new Error(`Only ${product.amountLeft} items are in stock.`);
 
-    // --- Pre-flight check with Paddle API (This part is already robust) ---
     try {
-        console.log(
-            `[Step 2] Verifying Paddle resources for Price ID: ${product.paddlePriceId}`
-        );
-        const priceResponse = await paddleApi.get(
-            `/prices/${product.paddlePriceId}`
-        );
-        if (priceResponse.data.data.status !== "active") {
-            throw new Error(
-                "This product has an inactive price and cannot be purchased."
-            );
-        }
-        console.log(`✅ Paddle price is active.`);
-    } catch (axiosError) {
-        console.error(
-            "❌ PADDLE PRE-FLIGHT CHECK FAILED:",
-            axiosError.response?.data || axiosError.message
-        );
-        throw new Error(
-            "Could not verify product details with our payment provider."
-        );
-    }
+        console.log(`🚀 Creating Pay Link for SINGLE item: ${product.name}`);
 
-    // --- Create the Transaction ---
-    try {
-        const payload = {
-            items: [
-                {
-                    priceId: product.paddlePriceId,
-                    quantity: parseInt(quantity, 10) || 1,
-                },
-            ],
-            customer: user.paddleCustomerId
-                ? { id: user.paddleCustomerId }
-                : { email: user.email },
+        const payLink = await paddleSdk.links.create({
+            items: [{ priceId: product.paddlePriceId, quantity: parseInt(quantity) || 1 }],
+            // The `custom_data` is now part of the pay link itself, ensuring it persists.
             custom_data: {
                 userId: user._id.toString(),
-                productId: product._id.toString(),
-                quantity: parseInt(quantity, 10) || 1,
-                isCartCheckout: false
+                isCartCheckout: false,
+                cart: [{ productId: product._id.toString(), quantity: parseInt(quantity) || 1 }]
             },
-        };
+            // You can pass customer email to pre-fill the checkout form
+            customer_email: user.email,
+        });
 
-        console.log("[Step 3] Sending final payload to Paddle /transactions");
-        const response = await paddleApi.post("/transactions", payload);
-        const transactionId = response.data?.data?.id;
+        // The pay link object directly contains the URL
+        const checkoutUrl = payLink.url;
+        if (!checkoutUrl) throw new Error('Could not generate checkout link from Paddle.');
 
-        if (!transactionId)
-            throw new Error("Could not initialize the payment session.");
-
-        const checkoutUrl = `${process.env.PADDLE_CHECKOUT_URL}/${transactionId}`;
-        console.log(`✅ Checkout created successfully! URL: ${checkoutUrl}`);
+        console.log(`✅ Pay Link created: ${checkoutUrl}`);
         res.status(200).json({ checkoutUrl });
-    } catch (axiosError) {
-        console.error(
-            "❌ PADDLE PRE-FLIGHT CHECK FAILED:",
-            axiosError.response?.data || axiosError.message
-        );
-        res.status(500);
-        throw new Error(
-            "Could not verify product details with our payment provider."
-        );
-    }
 
-    // --- 3. CREATE THE TRANSACTION (this should now succeed) ---
-    try {
-        const payload = {
-            items: [
-                {
-                    price_id: product.paddlePriceId,
-                    quantity: parseInt(quantity, 10) || 1,
-                },
-            ],
-            customer: { email: user.email },
-            customData: {
-                userId: user._id.toString(),
-                productId: product._id.toString(),
-                quantity: parseInt(quantity, 10) || 1,
-                isCartCheckout: false
-            },
-        };
-
-        console.log(
-            "[Step 3] Sending final payload to /transactions:",
-            JSON.stringify(payload, null, 2)
-        );
-
-        const response = await paddleApi.post("/transactions", payload);
-        const transactionId = response.data?.data?.id;
-
-        if (!transactionId) {
-            throw new Error(
-                "Payment provider created a transaction but did not return an ID."
-            );
-        }
-
-        const checkoutUrl = `${process.env.PADDLE_CHECKOUT_URL}/${transactionId}`;
-        console.log(`✅ Checkout created successfully! URL: ${checkoutUrl}`);
-
-        res.status(200).json({ checkoutUrl });
-    } catch (axiosError) {
-        console.error(
-            "❌ FINAL TRANSACTION ERROR:",
-            axiosError.response?.data?.error || axiosError.message
-        );
-        const errorMessage =
-            axiosError.response?.data?.error?.detail ||
-            "An unexpected final error occurred during checkout creation.";
-        res.status(500).json({ message: errorMessage });
+    } catch (paddleError) {
+        console.error("❌ PADDLE PAY LINK ERROR:", paddleError.message);
+        res.status(500).json({ message: "Could not create payment session." });
     }
 });
 
