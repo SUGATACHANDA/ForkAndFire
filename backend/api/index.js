@@ -16,7 +16,6 @@ const commentRoutes = require('../routes/commentRoutes.js');
 const productRoutes = require('../routes/productRoutes');
 const paddleRoutes = require('../routes/paddleRoutes');
 const orderRoutes = require('../routes/orderRoutes.js');
-const cartRoutes = require('../routes/cartRoutes.js')
 // For standard JSON routes
 const paddleController = require('../controllers/paddleController');
 
@@ -67,7 +66,6 @@ app.use('/api/newsletter', newsletterRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
-app.use('/api/cart', cartRoutes)
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Recipe Website API');

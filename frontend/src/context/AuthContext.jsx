@@ -10,10 +10,6 @@ export const AuthProvider = ({ children }) => {
     const [userInfo, setUserInfo] = useState(null);
     const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [cart, setCart] = useState([]);
-
-    const cartItemCount = cart.reduce((count, item) => count + item.quantity, 0);
-
 
     const login = useCallback((userData) => {
         localStorage.setItem('userInfo', JSON.stringify(userData));
@@ -42,58 +38,20 @@ export const AuthProvider = ({ children }) => {
     // Effect 2: Sync user's favorites when login status changes.
     useEffect(() => {
         if (userInfo) {
-            const controller = new AbortController();
-            const signal = controller.signal;
-
-            // Fetch favorites
-            API.get('/api/users/favorites', { signal })
-                .then(res => setFavorites(res.data.map(fav => fav._id)))
-                .catch(err => { if (err.name !== 'CanceledError') console.error('Failed to fetch favorites', err) });
-
-            // Fetch cart
-            API.get('/api/cart', { signal })
-                .then(res => setCart(Array.isArray(res.data) ? res.data : []))
-                .catch(err => { if (err.name !== 'CanceledError') console.error('Failed to fetch cart', err) });
-
-            return () => controller.abort();
-        } else {
-            // Clear data on logout
-            setFavorites([]);
-            setCart([]);
-        }
-    }, [userInfo]);
-
-    const addToCart = useCallback(async (productId, quantity = 1) => {
-        try {
-            // Optimistically update UI first for a snappy feel
-            setCart(prevCart => {
-                const existingItem = prevCart.find(item => item.product._id === productId);
-                if (existingItem) {
-                    // Item exists, just update quantity
-                    return prevCart.map(item => item.product._id === productId ? { ...item, quantity: item.quantity + quantity } : item);
+            const fetchFavorites = async () => {
+                try {
+                    const { data } = await API.get('/api/users/favorites');
+                    const favoriteIds = data.map(recipe => recipe._id);
+                    setFavorites(favoriteIds);
+                } catch (error) {
+                    if (error.response && error.response.status === 401) logout();
                 }
-                // Item doesn't exist, need more info, API response will handle it
-                // For now, we wait for the backend to give us the populated product
-                return prevCart;
-            });
-
-            const { data } = await API.post('/api/cart', { productId, quantity });
-            setCart(data); // Sync state with the robust data from the backend
-            // You can add a success toast notification here
-        } catch (error) {
-            console.error("Failed to add to cart", error);
-            // Add an error toast notification here
+            };
+            fetchFavorites();
+        } else {
+            setFavorites([]);
         }
-    }, []);
-
-    const removeFromCart = useCallback(async (productId) => {
-        try {
-            const { data } = await API.delete(`/api/cart/${productId}`);
-            setCart(data);
-        } catch (error) {
-            console.error("Failed to remove from cart", error);
-        }
-    }, []);
+    }, [userInfo, logout]);
 
     const toggleFavorite = useCallback(async (recipeId) => {
         if (!userInfo) return;
@@ -122,11 +80,7 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         toggleFavorite,
-        cart,
-        addToCart,
-        cartItemCount,
-        removeFromCart
-    }), [userInfo, favorites, loading, login, logout, toggleFavorite, cart, addToCart, cartItemCount, removeFromCart]);
+    }), [userInfo, favorites, loading, login, logout, toggleFavorite]);
 
     return (
         <AuthContext.Provider value={contextValue}>
