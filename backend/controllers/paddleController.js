@@ -776,7 +776,7 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
 
         res.sendStatus(200);
     } catch (err) {
-        console.error("❌ WEBHOOK ERROR:", err.message);
+        console.error("❌ WEBHOOK ERROR:", err);
         res.status(400).send("Webhook Error: Could not process event.");
     }
 });
