@@ -656,18 +656,22 @@ const handlePaddleWebhook = asyncHandler(async (req, res) => {
 
 
                 // Send Email (if needed)
+                console.log("👉 Creating order details for customer:", user.email);
                 const cartEmailHtml = createCartOrderConfirmationHtml({
                     recipientName: user.name.split(" ")[0] || "there",
                     recipientEmail: user.email,
                     order: newCartOrder,
                     purchasedItems: fullOrderDetails.items
                 });
+                console.log("Order Details for admin:", cartEmailHtml);
+                console.log("👉 Creating order details for admin");
                 const cartAdminEmailHtml = createCartAdminNotificationHtml({
                     recipientName: user.name.split(" ")[0] || "there",
                     recipientEmail: user.email,
-                    order: newCartOrder,
+                    order: fullOrderDetails,
                     purchasedItems: fullOrderDetails.items
                 });
+                console.log("Order Details for admin:", cartAdminEmailHtml);
 
                 console.log("👉 Sending customer order email to:", user.email);
                 await sendEmail({

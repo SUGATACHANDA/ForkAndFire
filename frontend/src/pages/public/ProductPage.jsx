@@ -33,6 +33,8 @@ const ProductPage = () => {
     const [pageError, setPageError] = useState(null);
     const [checkoutError, setCheckoutError] = useState(null);
     const [isCreatingCheckout, setIsCreatingCheckout] = useState(false);
+    const [isAddingToCart, setIsAddingToCart] = useState(false);
+
     const [quantity, setQuantity] = useState(1);
     const mainRef = useRef(null);
 
@@ -162,6 +164,8 @@ const ProductPage = () => {
             return;
         }
 
+        setIsAddingToCart(true)
+
         try {
             await addToCart({
                 productId: product._id,
@@ -169,11 +173,13 @@ const ProductPage = () => {
                 paddlePriceId: product.paddlePriceId,
                 token: userInfo.token
             });
-            alert('✅ Added to cart!');
+            // alert('✅ Added to cart!');
             navigate('/cart')
         } catch (err) {
             console.error("Add to cart error:", err);
             alert('❌ Failed to add to cart');
+        } finally {
+            setIsAddingToCart(false)
         }
     };
 
@@ -233,8 +239,8 @@ const ProductPage = () => {
                                         onClick={handleAddToCart}
                                         className="w-full bg-indigo-600 text-white font-bold py-4 px-6 rounded-lg text-lg flex items-center justify-center gap-3 hover:bg-indigo-700 transition-all transform hover:scale-105"
                                     >
-                                        <FontAwesomeIcon icon={faShoppingCart} />
-                                        <span>Add to Cart</span>
+                                        {isAddingToCart ? (<FontAwesomeIcon icon={faSpinner} spin />) : (<FontAwesomeIcon icon={faShoppingCart} />)}
+                                        <span>{isAddingToCart ? 'Adding to Cart...' : `Add To Cart (${quantity})`}</span>
                                     </button>
                                     {amountLeft < 10 && (
                                         <p className="text-center text-sm text-red-600 font-semibold animate-pulse">Only {amountLeft} left in stock - order soon!</p>

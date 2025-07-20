@@ -190,8 +190,29 @@ const Header = () => {
                     </div>
 
                     {/* Hamburger Menu Icon (Mobile) */}
-                    <div className="lg:hidden flex items-center z-50">
-                        <button onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Open menu" className="text-primary-text text-2xl focus:outline-none"><FontAwesomeIcon icon={isMenuOpen ? faTimes : faBars} className="transition-transform duration-300 transform" style={{ transform: isMenuOpen ? 'rotate(90deg)' : 'rotate(0deg)' }} /></button>
+                    <div className="lg:hidden flex items-center gap-4 z-50">
+                        {/* Hamburger Icon */}
+                        <button
+                            onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            aria-label="Open menu"
+                            className="text-primary-text text-2xl focus:outline-none"
+                        >
+                            <FontAwesomeIcon
+                                icon={isMenuOpen ? faTimes : faBars}
+                                className="transition-transform duration-300 transform"
+                                style={{ transform: isMenuOpen ? 'rotate(90deg)' : 'rotate(0deg)' }}
+                            />
+                        </button>
+
+                        {/* Cart Icon */}
+                        {userInfo && (
+                            <div
+                                onClick={() => navigate("/cart")}
+                                className="relative cursor-pointer"
+                            >
+                                <ShoppingCart className="w-5 h-5 text-gray-800" />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
