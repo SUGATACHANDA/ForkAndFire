@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import API from '../../api';
@@ -5,6 +6,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { usePaddle } from '../../hooks/usePaddle';
 import Loader from '../../components/common/Loader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
 import {
     faShoppingCart,
     faBoxOpen,
@@ -15,6 +17,8 @@ import {
     faGlobe
 } from '@fortawesome/free-solid-svg-icons';
 import { gsap } from 'gsap';
+import { addToCart } from '../../api/cart';
+
 
 const ProductPage = () => {
     // === Hooks and State ===
@@ -152,6 +156,27 @@ const ProductPage = () => {
         }
     };
 
+    const handleAddToCart = async () => {
+        if (!userInfo) {
+            navigate('/login', { state: { from: location } });
+            return;
+        }
+
+        try {
+            await addToCart({
+                productId: product._id,
+                quantity,
+                paddlePriceId: product.paddlePriceId,
+                token: userInfo.token
+            });
+            alert('✅ Added to cart!');
+            navigate('/cart')
+        } catch (err) {
+            console.error("Add to cart error:", err);
+            alert('❌ Failed to add to cart');
+        }
+    };
+
     // --- RENDER LOGIC ---
     if (loading) return <div className="min-h-screen pt-20 flex justify-center"><Loader /></div>;
     if (pageError) return <div className="min-h-screen flex flex-col items-center justify-center text-center text-red-600 bg-red-50 p-8"><FontAwesomeIcon icon={faExclamationTriangle} className="text-4xl mb-4" /><h2 className="text-2xl font-bold">{pageError}</h2><Link to="/shop" className="mt-6 text-sm font-semibold underline">Back to Shop</Link></div>;
@@ -203,6 +228,13 @@ const ProductPage = () => {
                                     <button onClick={handleBuyNow} disabled={isCreatingCheckout || !isPaddleReady} className="w-full bg-accent text-white font-bold py-4 px-6 rounded-lg text-lg flex items-center justify-center gap-3 hover:bg-opacity-90 transition-all transform hover:scale-105 disabled:bg-accent/60 disabled:cursor-wait">
                                         {isCreatingCheckout || !isPaddleReady ? (<FontAwesomeIcon icon={faSpinner} spin />) : (<FontAwesomeIcon icon={faShoppingCart} />)}
                                         <span>{isCreatingCheckout ? 'Initializing...' : !isPaddleReady ? 'Loading Payment...' : `Buy Now (${quantity})`}</span>
+                                    </button>
+                                    <button
+                                        onClick={handleAddToCart}
+                                        className="w-full bg-indigo-600 text-white font-bold py-4 px-6 rounded-lg text-lg flex items-center justify-center gap-3 hover:bg-indigo-700 transition-all transform hover:scale-105"
+                                    >
+                                        <FontAwesomeIcon icon={faShoppingCart} />
+                                        <span>Add to Cart</span>
                                     </button>
                                     {amountLeft < 10 && (
                                         <p className="text-center text-sm text-red-600 font-semibold animate-pulse">Only {amountLeft} left in stock - order soon!</p>

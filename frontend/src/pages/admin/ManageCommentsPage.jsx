@@ -8,6 +8,7 @@ import { faTrash, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 const ManageCommentsPage = () => {
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
+    document.title = "Manage All the Comments | Fork & Fire";
 
     useEffect(() => {
         const fetchComments = async () => {

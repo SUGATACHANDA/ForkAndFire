@@ -8,6 +8,11 @@ const userSchema = mongoose.Schema({
     isAdmin: { type: Boolean, required: true, default: false },
     favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Recipe' }],
     newsletter: { type: Boolean, default: false },
+    purchasedProducts: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Product',
+        default: [] // Prevents undefined errors
+    },
 }, { timestamps: true });
 
 // Password hashing middleware

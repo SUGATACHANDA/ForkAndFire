@@ -7,6 +7,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faBars, faTimes, faUserCircle
 } from '@fortawesome/free-solid-svg-icons';
+import API from '../../api';
+import { ShoppingCart } from 'lucide-react';
+
 
 // A private sub-component for the banner, co-located for simplicity
 // as it is only ever used by the Header.
@@ -40,6 +43,32 @@ const Header = () => {
 
     // --- State ---
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [cartItems, setCartItems] = useState([]);
+    const [loadingCart, setLoadingCart] = useState(true);
+
+    const fetchCart = useCallback(async () => {
+        if (!userInfo?.token) return;
+
+        try {
+            const res = await API.get('/api/cart', {
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+            });
+
+            const items = Array.isArray(res.data) ? res.data : res.data?.cart || [];
+            setCartItems(items);
+        } catch (err) {
+            console.error('❌ Error fetching cart:', err);
+            setCartItems([]);
+        } finally {
+            setLoadingCart(false);
+        }
+    }, [userInfo?.token]);
+
+    useEffect(() => {
+        if (userInfo?.token) {
+            fetchCart();
+        }
+    }, [fetchCart, userInfo?.token]);
 
     // --- Refs for Animation ---
     const mobileMenuRef = useRef(null);
@@ -103,7 +132,7 @@ const Header = () => {
                 {userInfo && (<NavLink to="/favorites" style={({ isActive }) => (isActive ? activeStyle : undefined)} className={linkClass} onClick={closeMenu}>Favorites</NavLink>)}
                 {userInfo && (<NavLink to="/my-orders" style={({ isActive }) => (isActive ? activeStyle : undefined)} className={linkClass} onClick={closeMenu}>My Orders</NavLink>)}
                 {showSubscribeLink && <NavLink to="/subscribe" style={({ isActive }) => (isActive ? activeStyle : undefined)} className={linkClass} onClick={closeMenu}>Subscribe</NavLink>}
-                {userInfo?.isAdmin && !isMobile && (<NavLink to="/admin" style={({ isActive }) => (isActive ? activeStyle : undefined)} className={`${linkClass} text-accent`} onClick={closeMenu}>Admin Panel</NavLink>)}
+                {userInfo?.isAdmin && !isMobile && (<NavLink to="/admin/dashboard" style={({ isActive }) => (isActive ? activeStyle : undefined)} className={`${linkClass} text-accent`} onClick={closeMenu}>Admin Panel</NavLink>)}
             </>
         );
     };
@@ -129,9 +158,34 @@ const Header = () => {
                     {/* Desktop User Actions */}
                     <div className="hidden lg:flex items-center space-x-4 z-50">
                         {userInfo ? (
-                            <div className="flex items-center gap-3"><FontAwesomeIcon icon={faUserCircle} className="text-accent text-2xl" /><span className="font-semibold text-primary-text">{userInfo.name.split(' ')[0]}</span><span className="text-gray-300">|</span><button onClick={handleLogout} className="text-sm text-secondary-text font-semibold uppercase hover:text-accent transition-colors">Logout</button></div>
+                            <div className="flex items-center gap-4">
+                                <FontAwesomeIcon icon={faUserCircle} className="text-accent text-2xl" />
+                                <span className="font-semibold text-primary-text">{userInfo.name.split(' ')[0]}</span>
+
+                                {/* Shopping Cart Icon */}
+                                {!loadingCart && (
+                                    <div className="relative cursor-pointer" onClick={() => navigate('/cart')}>
+                                        <ShoppingCart className="w-6 h-6 text-primary-text hover:text-accent transition-colors" />
+                                        {cartItems.length > 0 && (
+                                            <span className="absolute -top-2 -right-2 bg-accent text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                                                {cartItems.length}
+                                            </span>
+                                        )}
+                                    </div>
+                                )}
+
+                                <span className="text-gray-300">|</span>
+                                <button
+                                    onClick={handleLogout}
+                                    className="text-sm text-secondary-text font-semibold uppercase hover:text-accent transition-colors"
+                                >
+                                    Logout
+                                </button>
+                            </div>
                         ) : (
-                            <NavLink to="/login" className="bg-accent text-white px-5 py-2.5 rounded-full hover:bg-opacity-90 transition-colors text-xs font-bold uppercase">Login / Signup</NavLink>
+                            <NavLink to="/login" className="bg-accent text-white px-5 py-2.5 rounded-full hover:bg-opacity-90 transition-colors text-xs font-bold uppercase">
+                                Login / Signup
+                            </NavLink>
                         )}
                     </div>
 

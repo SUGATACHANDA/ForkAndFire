@@ -1,0 +1,199 @@
+Date : 2025-07-20 13:09:40
+Directory : d:\Recipe Website
+Total : 138 files,  17916 codes, 1436 comments, 1463 blanks, all 20815 lines
+
+Languages
++----------------+------------+------------+------------+------------+------------+
+| language       | files      | code       | comment    | blank      | total      |
++----------------+------------+------------+------------+------------+------------+
+| JSON           |          6 |      9,088 |          0 |          6 |      9,094 |
+| JavaScript JSX |         62 |      5,751 |        583 |        759 |      7,093 |
+| JavaScript     |         62 |      2,842 |        843 |        653 |      4,338 |
+| PostCSS        |          4 |        209 |         10 |         36 |        255 |
+| HTML           |          1 |         17 |          0 |          3 |         20 |
+| Markdown       |          1 |          7 |          0 |          6 |         13 |
+| XML            |          2 |          2 |          0 |          0 |          2 |
++----------------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                    | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                       |        138 |     17,916 |      1,436 |      1,463 |     20,815 |
+| backend                                                                 |         50 |      4,602 |        695 |        570 |      5,867 |
+| backend (Files)                                                         |          5 |      2,143 |         32 |         29 |      2,204 |
+| backend\api                                                             |          1 |         57 |         11 |         19 |         87 |
+| backend\config                                                          |          1 |         14 |          0 |          2 |         16 |
+| backend\controllers                                                     |         11 |      1,412 |        540 |        391 |      2,343 |
+| backend\middleware                                                      |          3 |         59 |          1 |          8 |         68 |
+| backend\models                                                          |          9 |        258 |          5 |         24 |        287 |
+| backend\routes                                                          |         11 |        155 |         47 |         55 |        257 |
+| backend\utils                                                           |          9 |        504 |         59 |         42 |        605 |
+| frontend                                                                |         88 |     13,314 |        741 |        893 |     14,948 |
+| frontend (Files)                                                        |          9 |      7,119 |          2 |         17 |      7,138 |
+| frontend\src                                                            |         79 |      6,195 |        739 |        876 |      7,810 |
+| frontend\src (Files)                                                    |          6 |        334 |         29 |         59 |        422 |
+| frontend\src\api                                                        |          2 |         32 |          1 |          7 |         40 |
+| frontend\src\assets                                                     |          2 |          2 |          0 |          0 |          2 |
+| frontend\src\assets (Files)                                             |          1 |          1 |          0 |          0 |          1 |
+| frontend\src\assets\images                                              |          1 |          1 |          0 |          0 |          1 |
+| frontend\src\components                                                 |         28 |      1,684 |        227 |        250 |      2,161 |
+| frontend\src\components\common                                          |         12 |        533 |         95 |         95 |        723 |
+| frontend\src\components\layout                                          |          8 |        638 |         74 |         80 |        792 |
+| frontend\src\components\recipe                                          |          4 |        314 |         27 |         40 |        381 |
+| frontend\src\components\ui                                              |          4 |        199 |         31 |         35 |        265 |
+| frontend\src\context                                                    |          2 |         83 |          8 |         18 |        109 |
+| frontend\src\hooks                                                      |          7 |        138 |        140 |         64 |        342 |
+| frontend\src\pages                                                      |         28 |      3,834 |        329 |        459 |      4,622 |
+| frontend\src\pages\admin                                                |         10 |      1,484 |         63 |        151 |      1,698 |
+| frontend\src\pages\public                                               |         15 |      1,909 |        161 |        236 |      2,306 |
+| frontend\src\pages\user                                                 |          3 |        441 |        105 |         72 |        618 |
+| frontend\src\routes                                                     |          2 |         25 |          0 |          9 |         34 |
+| frontend\src\tiptap                                                     |          1 |         47 |          5 |          6 |         58 |
+| frontend\src\utils                                                      |          1 |         16 |          0 |          4 |         20 |
++-------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| filename                                                                | language       | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| d:\Recipe Website\backend\api\index.js                                  | JavaScript     |         57 |         11 |         19 |         87 |
+| d:\Recipe Website\backend\config\db.js                                  | JavaScript     |         14 |          0 |          2 |         16 |
+| d:\Recipe Website\backend\controllers\cartController.js                 | JavaScript     |        258 |         14 |         65 |        337 |
+| d:\Recipe Website\backend\controllers\categoryController.js             | JavaScript     |         95 |         32 |         28 |        155 |
+| d:\Recipe Website\backend\controllers\commentController.js              | JavaScript     |         82 |         11 |         19 |        112 |
+| d:\Recipe Website\backend\controllers\dashboardController.js            | JavaScript     |         30 |          5 |          3 |         38 |
+| d:\Recipe Website\backend\controllers\faqController.js                  | JavaScript     |         57 |         15 |         14 |         86 |
+| d:\Recipe Website\backend\controllers\newsletterController.js           | JavaScript     |         88 |         12 |         24 |        124 |
+| d:\Recipe Website\backend\controllers\orderController.js                | JavaScript     |        113 |         94 |         42 |        249 |
+| d:\Recipe Website\backend\controllers\paddleController.js               | JavaScript     |        431 |        301 |        134 |        866 |
+| d:\Recipe Website\backend\controllers\productController.js              | JavaScript     |        114 |         20 |         27 |        161 |
+| d:\Recipe Website\backend\controllers\recipeController.js               | JavaScript     |         73 |         18 |         21 |        112 |
+| d:\Recipe Website\backend\controllers\userController.js                 | JavaScript     |         71 |         18 |         14 |        103 |
+| d:\Recipe Website\backend\middleware\authMiddleware.js                  | JavaScript     |         34 |          0 |          5 |         39 |
+| d:\Recipe Website\backend\middleware\errorMiddleware.js                 | JavaScript     |         14 |          0 |          2 |         16 |
+| d:\Recipe Website\backend\middleware\geoipMiddleware.js                 | JavaScript     |         11 |          1 |          1 |         13 |
+| d:\Recipe Website\backend\models\cartModel.js                           | JavaScript     |         35 |          0 |          4 |         39 |
+| d:\Recipe Website\backend\models\categoryModel.js                       | JavaScript     |          7 |          0 |          0 |          7 |
+| d:\Recipe Website\backend\models\commentModel.js                        | JavaScript     |         25 |          0 |          3 |         28 |
+| d:\Recipe Website\backend\models\faqModel.js                            | JavaScript     |          7 |          0 |          0 |          7 |
+| d:\Recipe Website\backend\models\newsletterModel.js                     | JavaScript     |         22 |          1 |          3 |         26 |
+| d:\Recipe Website\backend\models\orderModel.js                          | JavaScript     |         99 |          2 |          7 |        108 |
+| d:\Recipe Website\backend\models\productModel.js                        | JavaScript     |         14 |          0 |          0 |         14 |
+| d:\Recipe Website\backend\models\recipeModel.js                         | JavaScript     |         22 |          0 |          3 |         25 |
+| d:\Recipe Website\backend\models\userModel.js                           | JavaScript     |         27 |          2 |          4 |         33 |
+| d:\Recipe Website\backend\package-lock.json                             | JSON           |      2,032 |          0 |          3 |      2,035 |
+| d:\Recipe Website\backend\package.json                                  | JSON           |         28 |          0 |          1 |         29 |
+| d:\Recipe Website\backend\routes\cartRoutes.js                          | JavaScript     |         10 |          0 |          4 |         14 |
+| d:\Recipe Website\backend\routes\categoryRoutes.js                      | JavaScript     |         18 |          3 |          4 |         25 |
+| d:\Recipe Website\backend\routes\commentRoutes.js                       | JavaScript     |         14 |          2 |          4 |         20 |
+| d:\Recipe Website\backend\routes\dashboardRoutes.js                     | JavaScript     |          6 |          1 |          2 |          9 |
+| d:\Recipe Website\backend\routes\faqRoutes.js                           | JavaScript     |         18 |          3 |          4 |         25 |
+| d:\Recipe Website\backend\routes\newsletterRoutes.js                    | JavaScript     |          8 |          1 |          2 |         11 |
+| d:\Recipe Website\backend\routes\orderRoutes.js                         | JavaScript     |         14 |         16 |         12 |         42 |
+| d:\Recipe Website\backend\routes\paddleRoutes.js                        | JavaScript     |         10 |         14 |         10 |         34 |
+| d:\Recipe Website\backend\routes\productRoutes.js                       | JavaScript     |         21 |          3 |          6 |         30 |
+| d:\Recipe Website\backend\routes\recipeRoutes.js                        | JavaScript     |         28 |          4 |          5 |         37 |
+| d:\Recipe Website\backend\routes\userRoutes.js                          | JavaScript     |          8 |          0 |          2 |         10 |
+| d:\Recipe Website\backend\seeder.js                                     | JavaScript     |         38 |         20 |         11 |         69 |
+| d:\Recipe Website\backend\test-paddle.js                                | JavaScript     |         44 |         12 |         14 |         70 |
+| d:\Recipe Website\backend\utils\adminOrderNotificationTemplate.js       | JavaScript     |         82 |          9 |          3 |         94 |
+| d:\Recipe Website\backend\utils\createCartAdminNotificationHtml.js      | JavaScript     |         60 |          0 |          5 |         65 |
+| d:\Recipe Website\backend\utils\createCartOrderConfirmationHtml.js      | JavaScript     |         60 |          0 |          5 |         65 |
+| d:\Recipe Website\backend\utils\generateToken.js                        | JavaScript     |          7 |          1 |          2 |         10 |
+| d:\Recipe Website\backend\utils\newsletterTemplate.js                   | JavaScript     |        106 |         11 |          3 |        120 |
+| d:\Recipe Website\backend\utils\orderConfirmationTemplate.js            | JavaScript     |        122 |         10 |          5 |        137 |
+| d:\Recipe Website\backend\utils\paddleClient.js                         | JavaScript     |         27 |         22 |         12 |         61 |
+| d:\Recipe Website\backend\utils\paddleSdkClient.js                      | JavaScript     |         10 |          1 |          3 |         14 |
+| d:\Recipe Website\backend\utils\sendMail.js                             | JavaScript     |         30 |          5 |          4 |         39 |
+| d:\Recipe Website\backend\vercel.json                                   | JSON           |          1 |          0 |          0 |          1 |
+| d:\Recipe Website\frontend\README.md                                    | Markdown       |          7 |          0 |          6 |         13 |
+| d:\Recipe Website\frontend\eslint.config.js                             | JavaScript     |         28 |          0 |          2 |         30 |
+| d:\Recipe Website\frontend\index.html                                   | HTML           |         17 |          0 |          3 |         20 |
+| d:\Recipe Website\frontend\package-lock.json                            | JSON           |      6,950 |          0 |          1 |      6,951 |
+| d:\Recipe Website\frontend\package.json                                 | JSON           |         69 |          0 |          1 |         70 |
+| d:\Recipe Website\frontend\postcss.config.js                            | JavaScript     |          6 |          0 |          1 |          7 |
+| d:\Recipe Website\frontend\src\App.css                                  | PostCSS        |         37 |          0 |          6 |         43 |
+| d:\Recipe Website\frontend\src\App.jsx                                  | JavaScript JSX |        104 |         19 |         20 |        143 |
+| d:\Recipe Website\frontend\src\api\cart.js                              | JavaScript     |         21 |          1 |          4 |         26 |
+| d:\Recipe Website\frontend\src\api\index.js                             | JavaScript     |         11 |          0 |          3 |         14 |
+| d:\Recipe Website\frontend\src\assets\images\no-results.svg             | XML            |          1 |          0 |          0 |          1 |
+| d:\Recipe Website\frontend\src\assets\react.svg                         | XML            |          1 |          0 |          0 |          1 |
+| d:\Recipe Website\frontend\src\components\common\AnimatedPotIcon.jsx    | JavaScript JSX |         46 |          5 |          4 |         55 |
+| d:\Recipe Website\frontend\src\components\common\BackToTopButton.jsx    | JavaScript JSX |         37 |          7 |          7 |         51 |
+| d:\Recipe Website\frontend\src\components\common\Button.jsx             | JavaScript JSX |         22 |          0 |          5 |         27 |
+| d:\Recipe Website\frontend\src\components\common\Input.jsx              | JavaScript JSX |         18 |          0 |          2 |         20 |
+| d:\Recipe Website\frontend\src\components\common\LivePrice.jsx          | JavaScript JSX |         50 |          9 |         16 |         75 |
+| d:\Recipe Website\frontend\src\components\common\Loader.jsx             | JavaScript JSX |          9 |          0 |          2 |         11 |
+| d:\Recipe Website\frontend\src\components\common\Modal.jsx              | JavaScript JSX |         63 |         16 |         10 |         89 |
+| d:\Recipe Website\frontend\src\components\common\NotificationBanner.jsx | JavaScript JSX |         45 |          5 |          5 |         55 |
+| d:\Recipe Website\frontend\src\components\common\Pagination.jsx         | JavaScript JSX |         63 |          1 |          8 |         72 |
+| d:\Recipe Website\frontend\src\components\common\ScrollToTop.jsx        | JavaScript JSX |         19 |          8 |          4 |         31 |
+| d:\Recipe Website\frontend\src\components\common\ShareButton.jsx        | JavaScript JSX |         65 |         26 |         12 |        103 |
+| d:\Recipe Website\frontend\src\components\common\TipTapMenuBar.jsx      | JavaScript JSX |         96 |         18 |         20 |        134 |
+| d:\Recipe Website\frontend\src\components\layout\AdminLayout.jsx        | JavaScript JSX |         34 |          4 |          6 |         44 |
+| d:\Recipe Website\frontend\src\components\layout\AdminSidebar.jsx       | JavaScript JSX |         47 |          0 |          2 |         49 |
+| d:\Recipe Website\frontend\src\components\layout\CookieConsent.jsx      | JavaScript JSX |         83 |         20 |         12 |        115 |
+| d:\Recipe Website\frontend\src\components\layout\Footer.jsx             | JavaScript JSX |        104 |          3 |          8 |        115 |
+| d:\Recipe Website\frontend\src\components\layout\Header.jsx             | JavaScript JSX |        171 |         20 |         27 |        218 |
+| d:\Recipe Website\frontend\src\components\layout\NewsletterModal.jsx    | JavaScript JSX |        110 |         15 |         15 |        140 |
+| d:\Recipe Website\frontend\src\components\layout\Preloader.jsx          | JavaScript JSX |         73 |         10 |          8 |         91 |
+| d:\Recipe Website\frontend\src\components\layout\PublicLayout.jsx       | JavaScript JSX |         16 |          2 |          2 |         20 |
+| d:\Recipe Website\frontend\src\components\recipe\CommentSection.jsx     | JavaScript JSX |        183 |         16 |         19 |        218 |
+| d:\Recipe Website\frontend\src\components\recipe\FaqAccordion.jsx       | JavaScript JSX |         28 |          0 |          3 |         31 |
+| d:\Recipe Website\frontend\src\components\recipe\RecipeCard.jsx         | JavaScript JSX |         23 |          0 |          3 |         26 |
+| d:\Recipe Website\frontend\src\components\recipe\RelatedRecipes.jsx     | JavaScript JSX |         80 |         11 |         15 |        106 |
+| d:\Recipe Website\frontend\src\components\ui\AnimatedTitle.jsx          | JavaScript JSX |         40 |          5 |          7 |         52 |
+| d:\Recipe Website\frontend\src\components\ui\CategoryCard.jsx           | JavaScript JSX |         15 |          3 |          4 |         22 |
+| d:\Recipe Website\frontend\src\components\ui\HeroSection.jsx            | JavaScript JSX |         95 |         17 |         19 |        131 |
+| d:\Recipe Website\frontend\src\components\ui\WelcomePreloader.jsx       | JavaScript JSX |         49 |          6 |          5 |         60 |
+| d:\Recipe Website\frontend\src\context\AuthContext.jsx                  | JavaScript JSX |         71 |          8 |         13 |         92 |
+| d:\Recipe Website\frontend\src\context\CartContext.jsx                  | JavaScript JSX |         12 |          0 |          5 |         17 |
+| d:\Recipe Website\frontend\src\hooks\useAuth.js                         | JavaScript     |          5 |          0 |          1 |          6 |
+| d:\Recipe Website\frontend\src\hooks\useCart.js                         | JavaScript     |          5 |          0 |          1 |          6 |
+| d:\Recipe Website\frontend\src\hooks\useClickOutside.js                 | JavaScript     |         17 |          6 |          3 |         26 |
+| d:\Recipe Website\frontend\src\hooks\useDebounce.js                     | JavaScript     |         13 |          7 |          4 |         24 |
+| d:\Recipe Website\frontend\src\hooks\useMousePosition.js                | JavaScript     |         14 |          0 |          5 |         19 |
+| d:\Recipe Website\frontend\src\hooks\usePaddle.js                       | JavaScript     |         70 |        119 |         43 |        232 |
+| d:\Recipe Website\frontend\src\hooks\useScreenSize.js                   | JavaScript     |         14 |          8 |          7 |         29 |
+| d:\Recipe Website\frontend\src\index.css                                | PostCSS        |         98 |          8 |         18 |        124 |
+| d:\Recipe Website\frontend\src\main.jsx                                 | JavaScript JSX |         21 |          0 |          3 |         24 |
+| d:\Recipe Website\frontend\src\pages\admin\AdminDashboard.jsx           | JavaScript JSX |        304 |          9 |         16 |        329 |
+| d:\Recipe Website\frontend\src\pages\admin\ManageCategories.jsx         | JavaScript JSX |        129 |         11 |         11 |        151 |
+| d:\Recipe Website\frontend\src\pages\admin\ManageCommentsPage.jsx       | JavaScript JSX |         86 |          1 |          6 |         93 |
+| d:\Recipe Website\frontend\src\pages\admin\ManageFaqs.jsx               | JavaScript JSX |        125 |          7 |         10 |        142 |
+| d:\Recipe Website\frontend\src\pages\admin\ManageOrdersPage.jsx         | JavaScript JSX |        244 |          0 |         22 |        266 |
+| d:\Recipe Website\frontend\src\pages\admin\ManageProductsPage.jsx       | JavaScript JSX |        104 |          2 |          8 |        114 |
+| d:\Recipe Website\frontend\src\pages\admin\ManageRecipes.jsx            | JavaScript JSX |         67 |          0 |          6 |         73 |
+| d:\Recipe Website\frontend\src\pages\admin\ProductForm.jsx              | JavaScript JSX |        137 |         12 |         22 |        171 |
+| d:\Recipe Website\frontend\src\pages\admin\RecipeForm.jsx               | JavaScript JSX |        174 |          9 |         28 |        211 |
+| d:\Recipe Website\frontend\src\pages\admin\SendNewsletterPage.jsx       | JavaScript JSX |        114 |         12 |         22 |        148 |
+| d:\Recipe Website\frontend\src\pages\public\AboutPage.jsx               | JavaScript JSX |        120 |          9 |         14 |        143 |
+| d:\Recipe Website\frontend\src\pages\public\AllRecipesPage.jsx          | JavaScript JSX |        128 |         18 |         21 |        167 |
+| d:\Recipe Website\frontend\src\pages\public\HomePage.jsx                | JavaScript JSX |        134 |         18 |         25 |        177 |
+| d:\Recipe Website\frontend\src\pages\public\LoginPage.jsx               | JavaScript JSX |         88 |          0 |          8 |         96 |
+| d:\Recipe Website\frontend\src\pages\public\NotFoundPage.jsx            | JavaScript JSX |         88 |         14 |         14 |        116 |
+| d:\Recipe Website\frontend\src\pages\public\PrintRecipePage.jsx         | JavaScript JSX |        104 |         10 |         19 |        133 |
+| d:\Recipe Website\frontend\src\pages\public\ProductPage.jsx             | JavaScript JSX |        206 |         20 |         30 |        256 |
+| d:\Recipe Website\frontend\src\pages\public\PurchaseProcessingPage.jsx  | JavaScript JSX |         54 |          6 |         12 |         72 |
+| d:\Recipe Website\frontend\src\pages\public\PurchaseRedirect.jsx        | JavaScript JSX |         21 |         11 |          4 |         36 |
+| d:\Recipe Website\frontend\src\pages\public\PurchaseSuccessPage.jsx     | JavaScript JSX |         96 |         12 |         19 |        127 |
+| d:\Recipe Website\frontend\src\pages\public\RecipePage.jsx              | JavaScript JSX |        483 |         11 |         16 |        510 |
+| d:\Recipe Website\frontend\src\pages\public\ShopPage.jsx                | JavaScript JSX |         98 |         16 |         15 |        129 |
+| d:\Recipe Website\frontend\src\pages\public\SignupPage.jsx              | JavaScript JSX |         83 |          6 |          8 |         97 |
+| d:\Recipe Website\frontend\src\pages\public\SubscribePage.jsx           | JavaScript JSX |        123 |          7 |         19 |        149 |
+| d:\Recipe Website\frontend\src\pages\public\UnsubscribePage.jsx         | JavaScript JSX |         83 |          3 |         12 |         98 |
+| d:\Recipe Website\frontend\src\pages\user\CartPage.jsx                  | JavaScript JSX |        230 |          3 |         35 |        268 |
+| d:\Recipe Website\frontend\src\pages\user\FavouritesPage.jsx            | JavaScript JSX |         41 |          0 |          6 |         47 |
+| d:\Recipe Website\frontend\src\pages\user\MyOrdersPage.jsx              | JavaScript JSX |        170 |        102 |         31 |        303 |
+| d:\Recipe Website\frontend\src\print.css                                | PostCSS        |         43 |          0 |          7 |         50 |
+| d:\Recipe Website\frontend\src\routes\AdminRoute.jsx                    | JavaScript JSX |         13 |          0 |          5 |         18 |
+| d:\Recipe Website\frontend\src\routes\PrivateRoute.jsx                  | JavaScript JSX |         12 |          0 |          4 |         16 |
+| d:\Recipe Website\frontend\src\tiptap.css                               | PostCSS        |         31 |          2 |          5 |         38 |
+| d:\Recipe Website\frontend\src\tiptap\FontSize.js                       | JavaScript     |         47 |          5 |          6 |         58 |
+| d:\Recipe Website\frontend\src\utils\cloudinaryUpload.js                | JavaScript     |         16 |          0 |          4 |         20 |
+| d:\Recipe Website\frontend\tailwind.config.js                           | JavaScript     |         29 |          1 |          1 |         31 |
+| d:\Recipe Website\frontend\vercel.json                                  | JSON           |          8 |          0 |          0 |          8 |
+| d:\Recipe Website\frontend\vite.config.js                               | JavaScript     |          5 |          1 |          2 |          8 |
+| Total                                                                   |                |     17,916 |      1,436 |      1,463 |     20,815 |
++-------------------------------------------------------------------------+----------------+------------+------------+------------+------------+

@@ -1,0 +1,140 @@
+"filename", "language", "HTML", "JavaScript", "JSON", "PostCSS", "JavaScript JSX", "XML", "Markdown", "comment", "blank", "total"
+"d:\Recipe Website\backend\api\index.js", "JavaScript", 0, 57, 0, 0, 0, 0, 0, 11, 19, 87
+"d:\Recipe Website\backend\config\db.js", "JavaScript", 0, 14, 0, 0, 0, 0, 0, 0, 2, 16
+"d:\Recipe Website\backend\controllers\cartController.js", "JavaScript", 0, 258, 0, 0, 0, 0, 0, 14, 65, 337
+"d:\Recipe Website\backend\controllers\categoryController.js", "JavaScript", 0, 95, 0, 0, 0, 0, 0, 32, 28, 155
+"d:\Recipe Website\backend\controllers\commentController.js", "JavaScript", 0, 82, 0, 0, 0, 0, 0, 11, 19, 112
+"d:\Recipe Website\backend\controllers\dashboardController.js", "JavaScript", 0, 30, 0, 0, 0, 0, 0, 5, 3, 38
+"d:\Recipe Website\backend\controllers\faqController.js", "JavaScript", 0, 57, 0, 0, 0, 0, 0, 15, 14, 86
+"d:\Recipe Website\backend\controllers\newsletterController.js", "JavaScript", 0, 88, 0, 0, 0, 0, 0, 12, 24, 124
+"d:\Recipe Website\backend\controllers\orderController.js", "JavaScript", 0, 113, 0, 0, 0, 0, 0, 94, 42, 249
+"d:\Recipe Website\backend\controllers\paddleController.js", "JavaScript", 0, 431, 0, 0, 0, 0, 0, 301, 134, 866
+"d:\Recipe Website\backend\controllers\productController.js", "JavaScript", 0, 114, 0, 0, 0, 0, 0, 20, 27, 161
+"d:\Recipe Website\backend\controllers\recipeController.js", "JavaScript", 0, 73, 0, 0, 0, 0, 0, 18, 21, 112
+"d:\Recipe Website\backend\controllers\userController.js", "JavaScript", 0, 71, 0, 0, 0, 0, 0, 18, 14, 103
+"d:\Recipe Website\backend\middleware\authMiddleware.js", "JavaScript", 0, 34, 0, 0, 0, 0, 0, 0, 5, 39
+"d:\Recipe Website\backend\middleware\errorMiddleware.js", "JavaScript", 0, 14, 0, 0, 0, 0, 0, 0, 2, 16
+"d:\Recipe Website\backend\middleware\geoipMiddleware.js", "JavaScript", 0, 11, 0, 0, 0, 0, 0, 1, 1, 13
+"d:\Recipe Website\backend\models\cartModel.js", "JavaScript", 0, 35, 0, 0, 0, 0, 0, 0, 4, 39
+"d:\Recipe Website\backend\models\categoryModel.js", "JavaScript", 0, 7, 0, 0, 0, 0, 0, 0, 0, 7
+"d:\Recipe Website\backend\models\commentModel.js", "JavaScript", 0, 25, 0, 0, 0, 0, 0, 0, 3, 28
+"d:\Recipe Website\backend\models\faqModel.js", "JavaScript", 0, 7, 0, 0, 0, 0, 0, 0, 0, 7
+"d:\Recipe Website\backend\models\newsletterModel.js", "JavaScript", 0, 22, 0, 0, 0, 0, 0, 1, 3, 26
+"d:\Recipe Website\backend\models\orderModel.js", "JavaScript", 0, 99, 0, 0, 0, 0, 0, 2, 7, 108
+"d:\Recipe Website\backend\models\productModel.js", "JavaScript", 0, 14, 0, 0, 0, 0, 0, 0, 0, 14
+"d:\Recipe Website\backend\models\recipeModel.js", "JavaScript", 0, 22, 0, 0, 0, 0, 0, 0, 3, 25
+"d:\Recipe Website\backend\models\userModel.js", "JavaScript", 0, 27, 0, 0, 0, 0, 0, 2, 4, 33
+"d:\Recipe Website\backend\package-lock.json", "JSON", 0, 0, 2032, 0, 0, 0, 0, 0, 3, 2035
+"d:\Recipe Website\backend\package.json", "JSON", 0, 0, 28, 0, 0, 0, 0, 0, 1, 29
+"d:\Recipe Website\backend\routes\cartRoutes.js", "JavaScript", 0, 10, 0, 0, 0, 0, 0, 0, 4, 14
+"d:\Recipe Website\backend\routes\categoryRoutes.js", "JavaScript", 0, 18, 0, 0, 0, 0, 0, 3, 4, 25
+"d:\Recipe Website\backend\routes\commentRoutes.js", "JavaScript", 0, 14, 0, 0, 0, 0, 0, 2, 4, 20
+"d:\Recipe Website\backend\routes\dashboardRoutes.js", "JavaScript", 0, 6, 0, 0, 0, 0, 0, 1, 2, 9
+"d:\Recipe Website\backend\routes\faqRoutes.js", "JavaScript", 0, 18, 0, 0, 0, 0, 0, 3, 4, 25
+"d:\Recipe Website\backend\routes\newsletterRoutes.js", "JavaScript", 0, 8, 0, 0, 0, 0, 0, 1, 2, 11
+"d:\Recipe Website\backend\routes\orderRoutes.js", "JavaScript", 0, 14, 0, 0, 0, 0, 0, 16, 12, 42
+"d:\Recipe Website\backend\routes\paddleRoutes.js", "JavaScript", 0, 10, 0, 0, 0, 0, 0, 14, 10, 34
+"d:\Recipe Website\backend\routes\productRoutes.js", "JavaScript", 0, 21, 0, 0, 0, 0, 0, 3, 6, 30
+"d:\Recipe Website\backend\routes\recipeRoutes.js", "JavaScript", 0, 28, 0, 0, 0, 0, 0, 4, 5, 37
+"d:\Recipe Website\backend\routes\userRoutes.js", "JavaScript", 0, 8, 0, 0, 0, 0, 0, 0, 2, 10
+"d:\Recipe Website\backend\seeder.js", "JavaScript", 0, 38, 0, 0, 0, 0, 0, 20, 11, 69
+"d:\Recipe Website\backend\test-paddle.js", "JavaScript", 0, 44, 0, 0, 0, 0, 0, 12, 14, 70
+"d:\Recipe Website\backend\utils\adminOrderNotificationTemplate.js", "JavaScript", 0, 82, 0, 0, 0, 0, 0, 9, 3, 94
+"d:\Recipe Website\backend\utils\createCartAdminNotificationHtml.js", "JavaScript", 0, 60, 0, 0, 0, 0, 0, 0, 5, 65
+"d:\Recipe Website\backend\utils\createCartOrderConfirmationHtml.js", "JavaScript", 0, 60, 0, 0, 0, 0, 0, 0, 5, 65
+"d:\Recipe Website\backend\utils\generateToken.js", "JavaScript", 0, 7, 0, 0, 0, 0, 0, 1, 2, 10
+"d:\Recipe Website\backend\utils\newsletterTemplate.js", "JavaScript", 0, 106, 0, 0, 0, 0, 0, 11, 3, 120
+"d:\Recipe Website\backend\utils\orderConfirmationTemplate.js", "JavaScript", 0, 122, 0, 0, 0, 0, 0, 10, 5, 137
+"d:\Recipe Website\backend\utils\paddleClient.js", "JavaScript", 0, 27, 0, 0, 0, 0, 0, 22, 12, 61
+"d:\Recipe Website\backend\utils\paddleSdkClient.js", "JavaScript", 0, 10, 0, 0, 0, 0, 0, 1, 3, 14
+"d:\Recipe Website\backend\utils\sendMail.js", "JavaScript", 0, 30, 0, 0, 0, 0, 0, 5, 4, 39
+"d:\Recipe Website\backend\vercel.json", "JSON", 0, 0, 1, 0, 0, 0, 0, 0, 0, 1
+"d:\Recipe Website\frontend\README.md", "Markdown", 0, 0, 0, 0, 0, 0, 7, 0, 6, 13
+"d:\Recipe Website\frontend\eslint.config.js", "JavaScript", 0, 28, 0, 0, 0, 0, 0, 0, 2, 30
+"d:\Recipe Website\frontend\index.html", "HTML", 17, 0, 0, 0, 0, 0, 0, 0, 3, 20
+"d:\Recipe Website\frontend\package-lock.json", "JSON", 0, 0, 6950, 0, 0, 0, 0, 0, 1, 6951
+"d:\Recipe Website\frontend\package.json", "JSON", 0, 0, 69, 0, 0, 0, 0, 0, 1, 70
+"d:\Recipe Website\frontend\postcss.config.js", "JavaScript", 0, 6, 0, 0, 0, 0, 0, 0, 1, 7
+"d:\Recipe Website\frontend\src\App.css", "PostCSS", 0, 0, 0, 37, 0, 0, 0, 0, 6, 43
+"d:\Recipe Website\frontend\src\App.jsx", "JavaScript JSX", 0, 0, 0, 0, 104, 0, 0, 19, 20, 143
+"d:\Recipe Website\frontend\src\api\cart.js", "JavaScript", 0, 21, 0, 0, 0, 0, 0, 1, 4, 26
+"d:\Recipe Website\frontend\src\api\index.js", "JavaScript", 0, 11, 0, 0, 0, 0, 0, 0, 3, 14
+"d:\Recipe Website\frontend\src\assets\images\no-results.svg", "XML", 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\Recipe Website\frontend\src\assets\react.svg", "XML", 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\Recipe Website\frontend\src\components\common\AnimatedPotIcon.jsx", "JavaScript JSX", 0, 0, 0, 0, 46, 0, 0, 5, 4, 55
+"d:\Recipe Website\frontend\src\components\common\BackToTopButton.jsx", "JavaScript JSX", 0, 0, 0, 0, 37, 0, 0, 7, 7, 51
+"d:\Recipe Website\frontend\src\components\common\Button.jsx", "JavaScript JSX", 0, 0, 0, 0, 22, 0, 0, 0, 5, 27
+"d:\Recipe Website\frontend\src\components\common\Input.jsx", "JavaScript JSX", 0, 0, 0, 0, 18, 0, 0, 0, 2, 20
+"d:\Recipe Website\frontend\src\components\common\LivePrice.jsx", "JavaScript JSX", 0, 0, 0, 0, 50, 0, 0, 9, 16, 75
+"d:\Recipe Website\frontend\src\components\common\Loader.jsx", "JavaScript JSX", 0, 0, 0, 0, 9, 0, 0, 0, 2, 11
+"d:\Recipe Website\frontend\src\components\common\Modal.jsx", "JavaScript JSX", 0, 0, 0, 0, 63, 0, 0, 16, 10, 89
+"d:\Recipe Website\frontend\src\components\common\NotificationBanner.jsx", "JavaScript JSX", 0, 0, 0, 0, 45, 0, 0, 5, 5, 55
+"d:\Recipe Website\frontend\src\components\common\Pagination.jsx", "JavaScript JSX", 0, 0, 0, 0, 63, 0, 0, 1, 8, 72
+"d:\Recipe Website\frontend\src\components\common\ScrollToTop.jsx", "JavaScript JSX", 0, 0, 0, 0, 19, 0, 0, 8, 4, 31
+"d:\Recipe Website\frontend\src\components\common\ShareButton.jsx", "JavaScript JSX", 0, 0, 0, 0, 65, 0, 0, 26, 12, 103
+"d:\Recipe Website\frontend\src\components\common\TipTapMenuBar.jsx", "JavaScript JSX", 0, 0, 0, 0, 96, 0, 0, 18, 20, 134
+"d:\Recipe Website\frontend\src\components\layout\AdminLayout.jsx", "JavaScript JSX", 0, 0, 0, 0, 34, 0, 0, 4, 6, 44
+"d:\Recipe Website\frontend\src\components\layout\AdminSidebar.jsx", "JavaScript JSX", 0, 0, 0, 0, 47, 0, 0, 0, 2, 49
+"d:\Recipe Website\frontend\src\components\layout\CookieConsent.jsx", "JavaScript JSX", 0, 0, 0, 0, 83, 0, 0, 20, 12, 115
+"d:\Recipe Website\frontend\src\components\layout\Footer.jsx", "JavaScript JSX", 0, 0, 0, 0, 104, 0, 0, 3, 8, 115
+"d:\Recipe Website\frontend\src\components\layout\Header.jsx", "JavaScript JSX", 0, 0, 0, 0, 171, 0, 0, 20, 27, 218
+"d:\Recipe Website\frontend\src\components\layout\NewsletterModal.jsx", "JavaScript JSX", 0, 0, 0, 0, 110, 0, 0, 15, 15, 140
+"d:\Recipe Website\frontend\src\components\layout\Preloader.jsx", "JavaScript JSX", 0, 0, 0, 0, 73, 0, 0, 10, 8, 91
+"d:\Recipe Website\frontend\src\components\layout\PublicLayout.jsx", "JavaScript JSX", 0, 0, 0, 0, 16, 0, 0, 2, 2, 20
+"d:\Recipe Website\frontend\src\components\recipe\CommentSection.jsx", "JavaScript JSX", 0, 0, 0, 0, 183, 0, 0, 16, 19, 218
+"d:\Recipe Website\frontend\src\components\recipe\FaqAccordion.jsx", "JavaScript JSX", 0, 0, 0, 0, 28, 0, 0, 0, 3, 31
+"d:\Recipe Website\frontend\src\components\recipe\RecipeCard.jsx", "JavaScript JSX", 0, 0, 0, 0, 23, 0, 0, 0, 3, 26
+"d:\Recipe Website\frontend\src\components\recipe\RelatedRecipes.jsx", "JavaScript JSX", 0, 0, 0, 0, 80, 0, 0, 11, 15, 106
+"d:\Recipe Website\frontend\src\components\ui\AnimatedTitle.jsx", "JavaScript JSX", 0, 0, 0, 0, 40, 0, 0, 5, 7, 52
+"d:\Recipe Website\frontend\src\components\ui\CategoryCard.jsx", "JavaScript JSX", 0, 0, 0, 0, 15, 0, 0, 3, 4, 22
+"d:\Recipe Website\frontend\src\components\ui\HeroSection.jsx", "JavaScript JSX", 0, 0, 0, 0, 95, 0, 0, 17, 19, 131
+"d:\Recipe Website\frontend\src\components\ui\WelcomePreloader.jsx", "JavaScript JSX", 0, 0, 0, 0, 49, 0, 0, 6, 5, 60
+"d:\Recipe Website\frontend\src\context\AuthContext.jsx", "JavaScript JSX", 0, 0, 0, 0, 71, 0, 0, 8, 13, 92
+"d:\Recipe Website\frontend\src\context\CartContext.jsx", "JavaScript JSX", 0, 0, 0, 0, 12, 0, 0, 0, 5, 17
+"d:\Recipe Website\frontend\src\hooks\useAuth.js", "JavaScript", 0, 5, 0, 0, 0, 0, 0, 0, 1, 6
+"d:\Recipe Website\frontend\src\hooks\useCart.js", "JavaScript", 0, 5, 0, 0, 0, 0, 0, 0, 1, 6
+"d:\Recipe Website\frontend\src\hooks\useClickOutside.js", "JavaScript", 0, 17, 0, 0, 0, 0, 0, 6, 3, 26
+"d:\Recipe Website\frontend\src\hooks\useDebounce.js", "JavaScript", 0, 13, 0, 0, 0, 0, 0, 7, 4, 24
+"d:\Recipe Website\frontend\src\hooks\useMousePosition.js", "JavaScript", 0, 14, 0, 0, 0, 0, 0, 0, 5, 19
+"d:\Recipe Website\frontend\src\hooks\usePaddle.js", "JavaScript", 0, 70, 0, 0, 0, 0, 0, 119, 43, 232
+"d:\Recipe Website\frontend\src\hooks\useScreenSize.js", "JavaScript", 0, 14, 0, 0, 0, 0, 0, 8, 7, 29
+"d:\Recipe Website\frontend\src\index.css", "PostCSS", 0, 0, 0, 98, 0, 0, 0, 8, 18, 124
+"d:\Recipe Website\frontend\src\main.jsx", "JavaScript JSX", 0, 0, 0, 0, 21, 0, 0, 0, 3, 24
+"d:\Recipe Website\frontend\src\pages\admin\AdminDashboard.jsx", "JavaScript JSX", 0, 0, 0, 0, 304, 0, 0, 9, 16, 329
+"d:\Recipe Website\frontend\src\pages\admin\ManageCategories.jsx", "JavaScript JSX", 0, 0, 0, 0, 129, 0, 0, 11, 11, 151
+"d:\Recipe Website\frontend\src\pages\admin\ManageCommentsPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 86, 0, 0, 1, 6, 93
+"d:\Recipe Website\frontend\src\pages\admin\ManageFaqs.jsx", "JavaScript JSX", 0, 0, 0, 0, 125, 0, 0, 7, 10, 142
+"d:\Recipe Website\frontend\src\pages\admin\ManageOrdersPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 244, 0, 0, 0, 22, 266
+"d:\Recipe Website\frontend\src\pages\admin\ManageProductsPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 104, 0, 0, 2, 8, 114
+"d:\Recipe Website\frontend\src\pages\admin\ManageRecipes.jsx", "JavaScript JSX", 0, 0, 0, 0, 67, 0, 0, 0, 6, 73
+"d:\Recipe Website\frontend\src\pages\admin\ProductForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 137, 0, 0, 12, 22, 171
+"d:\Recipe Website\frontend\src\pages\admin\RecipeForm.jsx", "JavaScript JSX", 0, 0, 0, 0, 174, 0, 0, 9, 28, 211
+"d:\Recipe Website\frontend\src\pages\admin\SendNewsletterPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 114, 0, 0, 12, 22, 148
+"d:\Recipe Website\frontend\src\pages\public\AboutPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 120, 0, 0, 9, 14, 143
+"d:\Recipe Website\frontend\src\pages\public\AllRecipesPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 128, 0, 0, 18, 21, 167
+"d:\Recipe Website\frontend\src\pages\public\HomePage.jsx", "JavaScript JSX", 0, 0, 0, 0, 134, 0, 0, 18, 25, 177
+"d:\Recipe Website\frontend\src\pages\public\LoginPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 88, 0, 0, 0, 8, 96
+"d:\Recipe Website\frontend\src\pages\public\NotFoundPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 88, 0, 0, 14, 14, 116
+"d:\Recipe Website\frontend\src\pages\public\PrintRecipePage.jsx", "JavaScript JSX", 0, 0, 0, 0, 104, 0, 0, 10, 19, 133
+"d:\Recipe Website\frontend\src\pages\public\ProductPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 206, 0, 0, 20, 30, 256
+"d:\Recipe Website\frontend\src\pages\public\PurchaseProcessingPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 54, 0, 0, 6, 12, 72
+"d:\Recipe Website\frontend\src\pages\public\PurchaseRedirect.jsx", "JavaScript JSX", 0, 0, 0, 0, 21, 0, 0, 11, 4, 36
+"d:\Recipe Website\frontend\src\pages\public\PurchaseSuccessPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 96, 0, 0, 12, 19, 127
+"d:\Recipe Website\frontend\src\pages\public\RecipePage.jsx", "JavaScript JSX", 0, 0, 0, 0, 483, 0, 0, 11, 16, 510
+"d:\Recipe Website\frontend\src\pages\public\ShopPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 98, 0, 0, 16, 15, 129
+"d:\Recipe Website\frontend\src\pages\public\SignupPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 83, 0, 0, 6, 8, 97
+"d:\Recipe Website\frontend\src\pages\public\SubscribePage.jsx", "JavaScript JSX", 0, 0, 0, 0, 123, 0, 0, 7, 19, 149
+"d:\Recipe Website\frontend\src\pages\public\UnsubscribePage.jsx", "JavaScript JSX", 0, 0, 0, 0, 83, 0, 0, 3, 12, 98
+"d:\Recipe Website\frontend\src\pages\user\CartPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 230, 0, 0, 3, 35, 268
+"d:\Recipe Website\frontend\src\pages\user\FavouritesPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 41, 0, 0, 0, 6, 47
+"d:\Recipe Website\frontend\src\pages\user\MyOrdersPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 170, 0, 0, 102, 31, 303
+"d:\Recipe Website\frontend\src\print.css", "PostCSS", 0, 0, 0, 43, 0, 0, 0, 0, 7, 50
+"d:\Recipe Website\frontend\src\routes\AdminRoute.jsx", "JavaScript JSX", 0, 0, 0, 0, 13, 0, 0, 0, 5, 18
+"d:\Recipe Website\frontend\src\routes\PrivateRoute.jsx", "JavaScript JSX", 0, 0, 0, 0, 12, 0, 0, 0, 4, 16
+"d:\Recipe Website\frontend\src\tiptap.css", "PostCSS", 0, 0, 0, 31, 0, 0, 0, 2, 5, 38
+"d:\Recipe Website\frontend\src\tiptap\FontSize.js", "JavaScript", 0, 47, 0, 0, 0, 0, 0, 5, 6, 58
+"d:\Recipe Website\frontend\src\utils\cloudinaryUpload.js", "JavaScript", 0, 16, 0, 0, 0, 0, 0, 0, 4, 20
+"d:\Recipe Website\frontend\tailwind.config.js", "JavaScript", 0, 29, 0, 0, 0, 0, 0, 1, 1, 31
+"d:\Recipe Website\frontend\vercel.json", "JSON", 0, 0, 8, 0, 0, 0, 0, 0, 0, 8
+"d:\Recipe Website\frontend\vite.config.js", "JavaScript", 0, 5, 0, 0, 0, 0, 0, 1, 2, 8
+"Total", "-", 17, 2842, 9088, 209, 5751, 2, 7, 1436, 1463, 20815

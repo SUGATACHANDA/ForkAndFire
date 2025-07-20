@@ -20,6 +20,8 @@ const ManageFaqs = () => {
     const [editingFaqId, setEditingFaqId] = useState(null);
     const [editingFaq, setEditingFaq] = useState({ question: '', answer: '' });
 
+    document.title = "Manage All Your FAQs | Fork & Fire";
+
     useEffect(() => {
         fetchFaqs();
     }, []);

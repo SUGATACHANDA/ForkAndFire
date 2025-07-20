@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createTransactionForCheckout, getLivePrice, previewPrice } = require('../controllers/paddleController.js');
+const { createTransactionForCheckout, getLivePrice, previewPrice, cartCheckoutForMultipleProducts } = require('../controllers/paddleController.js');
 
 const { protect } = require('../middleware/authMiddleware.js');
 // const geoipMiddleware = require('../middleware/geoipMiddleware.js');
@@ -18,6 +18,8 @@ router.route('/:id/checkout').post(protect, createTransactionForCheckout);
 router.get('/price/:priceId', protect, getLivePrice);
 
 router.route('/preview-price').post(previewPrice);
+
+router.post("/cart-checkout", protect, cartCheckoutForMultipleProducts);
 
 
 /**

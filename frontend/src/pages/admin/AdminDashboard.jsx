@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Loader from "../../components/common/Loader";
 import { useAuth } from "../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { format } from 'timeago.js';
 import {
     faBookOpen,
     faUsers,
@@ -38,6 +39,8 @@ const AdminDashboard = () => {
     const [recentOrders, setRecentOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    document.title = "Dashboard | Fork & Fire";
 
     // Fetch all necessary dashboard data on component mount
     useEffect(() => {
@@ -203,32 +206,82 @@ const AdminDashboard = () => {
                     </h3>
                     <div className="mt-4 space-y-4">
                         {recentOrders.length > 0 ? (
-                            recentOrders.map((o) => (
-                                <div
-                                    key={o._id}
-                                    className="flex items-center justify-between p-3 bg-gray-50/70 rounded-lg"
-                                >
-                                    <div className="flex items-center gap-4">
-                                        {/* <img
-                                            src={o.product?.imageUrl}
-                                            alt={o.product?.name}
-                                            className="w-12 h-12 object-cover rounded-md flex-shrink-0"
-                                        /> */}
-                                        <div className="text-sm">
-                                            <p className="font-semibold text-gray-900">
-                                                {o.user?.name}
-                                            </p>
-                                            <p className="text-gray-500">
-                                                Purchased
-                                                <span className="font-medium ml-1 text-gray-700">
-                                                    {o.product?.name}
-                                                </span>
+                            recentOrders.map((o) => {
+                                if (o.type === 'single') {
+                                    return (
+                                        <div
+                                            key={o._id}
+                                            className="flex items-center justify-between p-3 bg-gray-50/70 rounded-lg"
+                                        >
+                                            <div className="flex items-center gap-4">
+                                                <div className="text-sm">
+                                                    <div className="flex items-center gap-2">
+                                                        <p className="font-semibold text-gray-900">{o.user?.name}</p>
+                                                        {Date.now() - new Date(o.purchasedAt).getTime() < 86400000 && (
+                                                            <img
+                                                                src="/assets/new-badge.gif"
+                                                                alt="New"
+                                                                className="w-5 h-5 animate-bounce"
+                                                            />
+                                                        )}
+                                                    </div>
+                                                    <p className="text-gray-500">
+                                                        Purchased
+                                                        <span className="font-medium ml-1 text-gray-700">
+                                                            {o.product?.name}
+                                                        </span>
+                                                    </p>
+                                                    <p className="text-xs text-gray-400 mt-1">{format(o.purchasedAt)}</p>
+                                                </div>
+                                            </div>
+                                            <p className="font-bold text-gray-800">
+                                                {formatPrice(o.displayPrice, o.currency)}
                                             </p>
                                         </div>
-                                    </div>
-                                    <p className="font-bold text-gray-800">{formatPrice(o.purchasePrice, o.currency)}</p>
-                                </div>
-                            ))
+                                    );
+                                } else if (o.type === 'cart') {
+                                    const firstProduct = o.items?.[0]?.product?.name || "Unknown item";
+                                    const additionalCount = o.items?.length - 1;
+                                    const label =
+                                        additionalCount > 0
+                                            ? `${firstProduct} + ${additionalCount} more`
+                                            : firstProduct;
+
+                                    return (
+                                        <div
+                                            key={o._id}
+                                            className="flex items-center justify-between p-3 bg-gray-50/70 rounded-lg"
+                                        >
+                                            <div className="flex items-center gap-4">
+                                                <div className="text-sm">
+                                                    <div className="flex items-center gap-2">
+                                                        <p className="font-semibold text-gray-900">{o.user?.name}</p>
+                                                        {Date.now() - new Date(o.purchasedAt).getTime() < 86400000 && (
+                                                            <img
+                                                                src="/assets/new-badge.gif"
+                                                                alt="New"
+                                                                className="w-6 h-6 animate-bounce"
+                                                            />
+                                                        )}
+                                                    </div>
+                                                    <p className="text-gray-500">
+                                                        Purchased
+                                                        <span className="font-medium ml-1 text-gray-700">
+                                                            {label}
+                                                        </span>
+                                                    </p>
+                                                    <p className="text-xs text-gray-400 mt-1">{format(o.purchasedAt)}</p>
+                                                </div>
+                                            </div>
+                                            <p className="font-bold text-gray-800">
+                                                {formatPrice(o.displayPrice || 0, o.currency)}
+                                            </p>
+                                        </div>
+                                    );
+                                } else {
+                                    return null;
+                                }
+                            })
                         ) : (
                             <p className="text-sm text-center text-gray-500 py-6">
                                 No recent orders.

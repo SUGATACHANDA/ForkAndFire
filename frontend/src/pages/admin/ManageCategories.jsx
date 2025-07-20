@@ -20,6 +20,8 @@ const ManageCategories = () => {
     const [editingCategoryId, setEditingCategoryId] = useState(null);
     const [editingCategoryName, setEditingCategoryName] = useState('');
 
+    document.title = "Manage All Your Recipe Categories | Fork & Fire";
+
     // Fetch all categories on component mount
     useEffect(() => {
         fetchCategories();

@@ -1,7 +1,7 @@
 // const axios = require('axios');
-// const dotenv = require('dotenv');
+const dotenv = require('dotenv');
 
-// dotenv.config();
+dotenv.config();
 
 // if (!process.env.PADDLE_API_KEY) {
 //     throw new Error('FATAL ERROR: PADDLE_API_KEY is not defined.');

@@ -1,23 +1,21 @@
 const mongoose = require('mongoose');
 
-const orderSchema = mongoose.Schema({
-    // Link to the user who made the purchase
+// --- 🧾 Single Product Order Schema ---
+const orderSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'User',
     },
-    // Link to the product that was purchased
     product: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'Product',
     },
-    // Details about the specific transaction from Paddle
     paddleTransactionId: {
         type: String,
         required: true,
-        unique: true, // Prevents duplicate order processing for the same transaction
+        unique: true, // Ensure no duplicate transactions
     },
     quantity: {
         type: Number,
@@ -25,7 +23,7 @@ const orderSchema = mongoose.Schema({
         default: 1,
     },
     purchasePrice: {
-        type: Number, // Price in cents at the time of purchase
+        type: Number, // Price in cents
         required: true,
     },
     currency: {
@@ -42,10 +40,9 @@ const orderSchema = mongoose.Schema({
         type: Date,
         default: Date.now,
     },
-    // unique & sparse is good for tokens
     displayPrice: {
         type: String,
-        required: true
+        required: true,
     },
 }, {
     timestamps: true,
@@ -53,4 +50,58 @@ const orderSchema = mongoose.Schema({
 
 const Order = mongoose.model('Order', orderSchema);
 
-module.exports = Order;
+
+// --- 🛒 Cart-Based Multi-Item Order Schema ---
+const cartOrderSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'User',
+    },
+    items: [
+        {
+            product: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Product',
+                required: true,
+            },
+            quantity: {
+                type: Number,
+                required: true,
+            }
+        }
+    ],
+    paddleTransactionId: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    purchasePrice: {
+        type: Number,
+        required: true,
+    },
+    displayPrice: {
+        type: Number,
+        required: true,
+    },
+    currency: {
+        type: String,
+        required: true,
+    },
+    status: {
+        type: String,
+        enum: ['completed', 'pending', 'refunded'],
+        default: 'completed',
+    },
+    purchasedAt: {
+        type: Date,
+        default: Date.now,
+    },
+}, { timestamps: true });
+
+const CartOrder = mongoose.model('CartOrder', cartOrderSchema);
+
+module.exports = {
+    CartOrder,
+    Order
+};

@@ -15,6 +15,8 @@ const AllRecipesPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    document.title = "Explore World Class Recipes in a One Place | Fork & Fire"
+
     const [searchParams, setSearchParams] = useSearchParams();
 
     // --- State for filter inputs ---

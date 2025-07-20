@@ -13,6 +13,8 @@ const SubscribePage = () => {
     const [status, setStatus] = useState('idle'); // 'idle', 'loading', 'success', 'error'
     const [message, setMessage] = useState('');
 
+    document.title = "Subscribe to get New Weekly Recipes and more... | Fork & Fire"
+
     // --- Refs for Animation ---
     const pageRef = useRef(null);
 

@@ -49,6 +49,7 @@ import ManageProductsPage from './pages/admin/ManageProductsPage';
 import PurchaseSuccessPage from './pages/public/PurchaseSuccessPage';
 import PurchaseProcessingPage from './pages/public/PurchaseProcessingPage';
 import ManageOrdersPage from './pages/admin/ManageOrdersPage';
+import CartPage from './pages/user/CartPage';
 
 function App() {
   // No more `useLocation` or conditional logic for header/footer here!
@@ -96,6 +97,7 @@ function App() {
           <Route path="" element={<PrivateRoute />}>
             <Route path="favorites" element={<FavoritesPage />} />
             <Route path="my-orders" element={<MyOrdersPage />} />
+            <Route path="cart" element={<CartPage />} />
           </Route>
         </Route>
 

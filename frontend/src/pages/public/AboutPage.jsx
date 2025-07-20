@@ -17,6 +17,8 @@ gsap.registerPlugin(ScrollTrigger);
 const AboutPage = () => {
     const pageRef = useRef(null);
 
+    document.title = "Our Story | Fork & Fire"
+
     // GSAP Animations
     useEffect(() => {
         const ctx = gsap.context(() => {

@@ -18,6 +18,7 @@ const paddleRoutes = require('../routes/paddleRoutes');
 const orderRoutes = require('../routes/orderRoutes.js');
 // For standard JSON routes
 const paddleController = require('../controllers/paddleController');
+const cartRoutes = require('../routes/cartRoutes');
 
 
 // Initial Setup
@@ -43,7 +44,8 @@ const app = express();
 app.post(
     '/api/paddle/webhook',
     express.raw({ type: 'application/json' }),
-    paddleController.handlePaddleWebhook
+    paddleController.handlePaddleWebhook,
+    // paddleController.handleCartCheckoutWebhook
 );
 
 app.use(cors());
@@ -66,6 +68,8 @@ app.use('/api/newsletter', newsletterRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
+
+app.use('/api/cart', cartRoutes);
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Recipe Website API');

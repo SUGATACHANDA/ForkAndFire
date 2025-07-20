@@ -11,6 +11,8 @@ const ManageProducts = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    document.title = "Manage All Your Shop Products | Fork & Fire";
+
     const fetchProducts = async () => {
         try {
             const { data } = await API.get('/api/products/all'); // Assumes an admin route to get ALL products, even out of stock
@@ -57,8 +59,8 @@ const ManageProducts = () => {
                         <tr>
                             <th scope="col" className="px-6 py-3 w-16">Image</th>
                             <th scope="col" className="px-6 py-3">Product Name</th>
+                            <th scope="col" className="px-6 py-3">Stock</th>
                             <th scope="col" className="px-6 py-3">Price</th>
-                            <th scope="col" className="px-6 py-3">Stock Left</th>
                             <th scope="col" className="px-6 py-3">Actions</th>
                         </tr>
                     </thead>

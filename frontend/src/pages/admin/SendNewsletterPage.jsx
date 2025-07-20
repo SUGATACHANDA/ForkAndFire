@@ -34,6 +34,8 @@ const SendNewsletterPage = () => {
     // This state will now be force-updated by the editor.
     const [wordCount, setWordCount] = useState(0);
 
+    document.title = "Send Newsletter to all Your Subscribers | Fork & Fire";
+
     // --- Editor Configuration ---
     const WORD_COUNT_LIMIT = 5000;
 

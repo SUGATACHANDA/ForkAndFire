@@ -93,3 +93,32 @@ body {
         @apply flex items-center w-full text-left px-3 py-2 text-sm text-gray-700 font-semibold rounded-md hover:bg-accent-light hover:text-accent transition-colors;
     }
 }
+
+body.modal-open::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(6px) brightness(0.9);
+  background: rgba(255, 255, 255, 0.4);
+  z-index: 40; /* Just below the modal z-50 */
+  pointer-events: none; /* Allow interaction with modal */
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+.animate-wiggle {
+  animation: wiggle 1s ease-in-out infinite;
+}
+
+input[type="number"].no-spinner::-webkit-inner-spin-button,
+input[type="number"].no-spinner::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"].no-spinner {
+    -moz-appearance: textfield; /* Firefox */
+}

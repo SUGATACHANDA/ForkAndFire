@@ -8,6 +8,8 @@ const FavoritesPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    document.title = "Favourite Recipe all in One Place | Fork & Fire"
+
     useEffect(() => {
         const fetchFavorites = async () => {
             try {

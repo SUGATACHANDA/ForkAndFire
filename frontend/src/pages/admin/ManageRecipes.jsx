@@ -8,6 +8,8 @@ const ManageRecipes = () => {
     const [recipes, setRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    document.title = "Manage All Your Recipes | Fork & Fire";
+
     useEffect(() => {
         API.get('/api/recipes')
             .then(res => {

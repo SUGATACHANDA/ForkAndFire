@@ -58,6 +58,8 @@ const ShopPage = () => {
     const [error, setError] = useState(null);
     const containerRef = useRef(null);
 
+    document.title = "Sizzle, Stir, Serve – Shop Now! | Fork & Fire"
+
     // Data fetching (no changes needed)
     useEffect(() => {
         const fetchProducts = async () => {
