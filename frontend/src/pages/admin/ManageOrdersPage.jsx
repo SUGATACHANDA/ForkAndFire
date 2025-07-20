@@ -138,7 +138,7 @@ const ManageOrdersPage = () => {
     const [totalOrders, setTotalOrders] = useState(0);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
+    const itemsPerPage = 5;
 
     document.title = "Manage All Your Orders | Fork & Fire";
 
