@@ -87,7 +87,7 @@ const OrderModal = ({ order, onClose, onComplete }) => {
                         </div>
                     )}
                 </div>
-                {!order.markAsComplete && (
+                {!order.markAsComplete ? (
                     <div className="border-t p-4 flex justify-center">
                         <button
                             onClick={handleComplete}
@@ -96,6 +96,10 @@ const OrderModal = ({ order, onClose, onComplete }) => {
                         >
                             {loading ? "Marking..." : "Mark as Complete"}
                         </button>
+                    </div>
+                ) : (
+                    <div className="border-t p-4 flex justify-center">
+                        <span className="text-green-600 font-semibold">Order Completed</span>
                     </div>
                 )}
             </div>
