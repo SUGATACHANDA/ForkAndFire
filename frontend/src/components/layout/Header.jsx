@@ -8,7 +8,7 @@ import {
     faBars, faTimes, faUserCircle
 } from '@fortawesome/free-solid-svg-icons';
 import API from '../../api';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, X } from 'lucide-react';
 
 
 // A private sub-component for the banner, co-located for simplicity
@@ -218,18 +218,49 @@ const Header = () => {
             </div>
 
             {/* Mobile Menu Sliding Panel */}
-            <div ref={mobileMenuRef} className="lg:hidden fixed top-0 left-0 w-full h-screen bg-background transform -translate-x-full z-40">
-                <div className="flex flex-col items-center justify-center h-full text-center">
-                    <nav className="flex flex-col space-y-8 text-primary-text font-semibold">
+            <div
+                ref={mobileMenuRef}
+                className={`lg:hidden fixed top-0 left-0 w-full h-screen bg-background z-40 transition-transform duration-300 ease-in-out ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
+                    }`}
+            >
+                {/* Close (X) button */}
+                <button
+                    onClick={() => setIsMenuOpen(false)}
+                    aria-label="Close menu"
+                    className="absolute top-4 right-4 text-primary-text p-2"
+                >
+                    <X size={28} />
+                </button>
+
+                {/* Centered content */}
+                <div className="flex flex-col items-center justify-center h-full text-center space-y-8">
+                    {/* Nav Links */}
+                    <nav className="flex flex-col space-y-6 text-primary-text font-semibold">
                         <NavLinks mobile={true} />
                     </nav>
-                    <div className="absolute bottom-20 text-center mobile-link mt-2">
-                        {userInfo ? (
-                            <div className="flex flex-col items-center gap-4 "><p className="text-secondary-text capitalize text-lg">Signed in as {userInfo.name}</p><button onClick={handleLogout} className="font-bold text-lg text-accent uppercase">Logout</button></div>
-                        ) : (
-                            <NavLink to="/login" onClick={() => setIsMenuOpen(false)} className="bg-accent text-white px-8 py-3 rounded-full text-lg font-bold uppercase">Login / Signup</NavLink>
-                        )}
-                    </div>
+
+                    {/* User Info + Logout/Login */}
+                    {userInfo ? (
+                        <div className="flex flex-col items-center gap-3">
+                            <p className="text-secondary-text capitalize text-base">
+                                Signed in as {userInfo.name}
+                            </p>
+                            <button
+                                onClick={handleLogout}
+                                className="font-bold text-accent uppercase text-sm"
+                            >
+                                Logout
+                            </button>
+                        </div>
+                    ) : (
+                        <NavLink
+                            to="/login"
+                            onClick={() => setIsMenuOpen(false)}
+                            className="bg-accent text-white px-6 py-2 rounded-full text-sm font-bold uppercase"
+                        >
+                            Login / Signup
+                        </NavLink>
+                    )}
                 </div>
             </div>
         </header>

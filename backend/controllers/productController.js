@@ -1,12 +1,15 @@
-const asyncHandler = require('express-async-handler');
-const Product = require('../models/productModel.js');
-const { paddleApi } = require('../utils/paddleClient.js');
+const asyncHandler = require("express-async-handler");
+const Product = require("../models/productModel.js");
+const { paddleApi } = require("../utils/paddleClient.js");
 
 // === PUBLIC-FACING CONTROLLERS ===
 
 /** @desc Get all active products */
 const getAllProducts = asyncHandler(async (req, res) => {
-    const products = await Product.find({ amountLeft: { $gt: 0 } }).sort({ createdAt: -1 });
+    const limit = Number(req.query.limit) || 0;
+    const products = await Product.find({ amountLeft: { $gt: 0 } }).sort({
+        createdAt: -1,
+    }).limit(limit);
     res.json(products);
 });
 
@@ -14,7 +17,10 @@ const getAllProducts = asyncHandler(async (req, res) => {
 const getProductById = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (product) res.json(product);
-    else { res.status(404); throw new Error('Product not found'); }
+    else {
+        res.status(404);
+        throw new Error("Product not found");
+    }
 });
 
 /** @desc Create a Paddle Transaction for Inline Checkout */
@@ -24,54 +30,83 @@ const createTransactionForCheckout = asyncHandler(async (req, res) => {
     const user = req.user;
 
     const product = await Product.findById(productId);
-    if (!product || !product.paddlePriceId) throw new Error('Product not found or not configured.');
-    if (quantity > product.amountLeft) throw new Error(`Only ${product.amountLeft} items are in stock.`);
+    if (!product || !product.paddlePriceId)
+        throw new Error("Product not found or not configured.");
+    if (quantity > product.amountLeft)
+        throw new Error(`Only ${product.amountLeft} items are in stock.`);
 
     try {
-        const response = await paddleApi.post('/transactions', {
-            items: [{ price_id: product.paddlePriceId, quantity: parseInt(quantity) || 1 }],
+        const response = await paddleApi.post("/transactions", {
+            items: [
+                { price_id: product.paddlePriceId, quantity: parseInt(quantity) || 1 },
+            ],
             customer: { email: user.email },
-            custom_data: { userId: user._id.toString(), productId: product._id.toString(), quantity: parseInt(quantity) || 1 }
+            custom_data: {
+                userId: user._id.toString(),
+                productId: product._id.toString(),
+                quantity: parseInt(quantity) || 1,
+            },
         });
         const transactionId = response.data?.data?.id;
-        if (!transactionId) throw new Error("Could not initialize payment session.");
+        if (!transactionId)
+            throw new Error("Could not initialize payment session.");
 
         res.status(200).json({ transactionId });
     } catch (err) {
         console.error("❌ PADDLE TRANSACTION ERROR:", err.response?.data);
-        throw new Error(err.response?.data?.error?.detail || "Payment provider error.");
+        throw new Error(
+            err.response?.data?.error?.detail || "Payment provider error."
+        );
     }
 });
-
 
 // === ADMIN-ONLY CONTROLLERS ===
 
 /** @desc Create a new product on Paddle and locally */
 const createProduct = asyncHandler(async (req, res) => {
-    const { name, description, price, currency = 'USD', imageUrl, totalAmount } = req.body;
-    if (!name || !price || !totalAmount) throw new Error('Name, price, and total stock are required.');
+    const {
+        name,
+        description,
+        price,
+        currency = "USD",
+        imageUrl,
+        totalAmount,
+    } = req.body;
+    if (!name || !price || !totalAmount)
+        throw new Error("Name, price, and total stock are required.");
 
     // Step 1: Create Product on Paddle
-    const paddleProductPayload = { name, description, tax_category: 'standard' };
-    const productResponse = await paddleApi.post('/products', paddleProductPayload);
+    const paddleProductPayload = { name, description, tax_category: "standard" };
+    const productResponse = await paddleApi.post(
+        "/products",
+        paddleProductPayload
+    );
     const paddleProduct = productResponse.data.data;
 
     // Step 2: Create a Price for the Product on Paddle
     const pricePayload = {
         product_id: paddleProduct.id,
         description: `Standard price for ${name}`,
-        unit_price: { amount: String(Math.round(parseFloat(price) * 100)), currency_code: currency },
-        billing_cycle: null
+        unit_price: {
+            amount: String(Math.round(parseFloat(price) * 100)),
+            currency_code: currency,
+        },
+        billing_cycle: null,
     };
-    const priceResponse = await paddleApi.post('/prices', pricePayload);
+    const priceResponse = await paddleApi.post("/prices", pricePayload);
     const paddlePrice = priceResponse.data.data;
 
     // Step 3: Save to local DB
     const newProduct = new Product({
-        name, description, imageUrl, price, currency, totalAmount,
+        name,
+        description,
+        imageUrl,
+        price,
+        currency,
+        totalAmount,
         amountLeft: totalAmount,
         paddleProductId: paddleProduct.id,
-        paddlePriceId: paddlePrice.id
+        paddlePriceId: paddlePrice.id,
     });
     const createdProduct = await newProduct.save();
     res.status(201).json(createdProduct);
@@ -79,18 +114,33 @@ const createProduct = asyncHandler(async (req, res) => {
 
 /** @desc Update a product locally and sync changes with Paddle */
 const updateProduct = asyncHandler(async (req, res) => {
-    const { name, description, imageUrl, price, totalAmount, amountLeft, currency } = req.body;
+    const {
+        name,
+        description,
+        imageUrl,
+        price,
+        totalAmount,
+        amountLeft,
+        currency,
+    } = req.body;
     const product = await Product.findById(req.params.id);
 
-    if (!product) { res.status(404); throw new Error('Product not found.'); }
+    if (!product) {
+        res.status(404);
+        throw new Error("Product not found.");
+    }
 
     // --- Sync Product Details (Name, Description) ---
     const paddleProductUpdate = {};
     if (name && name !== product.name) paddleProductUpdate.name = name;
-    if (description && description !== product.description) paddleProductUpdate.description = description;
+    if (description && description !== product.description)
+        paddleProductUpdate.description = description;
 
     if (Object.keys(paddleProductUpdate).length > 0) {
-        await paddleApi.patch(`/products/${product.paddleProductId}`, paddleProductUpdate);
+        await paddleApi.patch(
+            `/products/${product.paddleProductId}`,
+            paddleProductUpdate
+        );
     }
 
     // --- Sync Price (only if it has changed) ---
@@ -100,16 +150,23 @@ const updateProduct = asyncHandler(async (req, res) => {
     if (newPrice && newPrice !== product.price) {
         // Price has changed. We must archive the old one and create a new one.
         // 1. Archive old price (best effort, don't fail if it's already inactive)
-        await paddleApi.patch(`/prices/${product.paddlePriceId}`, { status: 'archived' }).catch(e => console.warn(`Could not archive old price ${product.paddlePriceId}`));
+        await paddleApi
+            .patch(`/prices/${product.paddlePriceId}`, { status: "archived" })
+            .catch((e) =>
+                console.warn(`Could not archive old price ${product.paddlePriceId}`)
+            );
 
         // 2. Create new price
         const newPricePayload = {
             product_id: product.paddleProductId,
             description: `Updated price for ${name || product.name}`,
-            unit_price: { amount: String(Math.round(newPrice * 100)), currency_code: currency || product.currency },
+            unit_price: {
+                amount: String(Math.round(newPrice * 100)),
+                currency_code: currency || product.currency,
+            },
             billing_cycle: null,
         };
-        const priceResponse = await paddleApi.post('/prices', newPricePayload);
+        const priceResponse = await paddleApi.post("/prices", newPricePayload);
         finalPaddlePriceId = priceResponse.data.data.id;
     }
 
@@ -122,7 +179,8 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.amountLeft = amountLeft ?? product.amountLeft;
     product.paddlePriceId = finalPaddlePriceId; // Use the new or existing price ID
 
-    if (product.amountLeft > product.totalAmount) throw new Error('"Stock Left" cannot exceed "Total Stock".');
+    if (product.amountLeft > product.totalAmount)
+        throw new Error('"Stock Left" cannot exceed "Total Stock".');
 
     const updatedProduct = await product.save();
     res.json(updatedProduct);
@@ -133,13 +191,17 @@ const deleteProduct = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (product) {
         // Archive on Paddle first to prevent new purchases
-        await paddleApi.patch(`/products/${product.paddleProductId}`, { status: 'archived' });
+        await paddleApi.patch(`/products/${product.paddleProductId}`, {
+            status: "archived",
+        });
         // Then delete locally
         await product.deleteOne();
-        res.json({ message: 'Product archived on Paddle and removed from database.' });
+        res.json({
+            message: "Product archived on Paddle and removed from database.",
+        });
     } else {
         res.status(404);
-        throw new Error('Product not found');
+        throw new Error("Product not found");
     }
 });
 
@@ -149,7 +211,6 @@ const getAllProductsAdmin = asyncHandler(async (req, res) => {
     res.json(products);
 });
 
-
 module.exports = {
     getAllProducts,
     getProductById,
@@ -157,5 +218,5 @@ module.exports = {
     createProduct,
     updateProduct,
     deleteProduct,
-    getAllProductsAdmin
+    getAllProductsAdmin,
 };

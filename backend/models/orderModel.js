@@ -44,6 +44,10 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    markAsComplete: {
+        type: Boolean,
+        default: false,
+    },
 }, {
     timestamps: true,
 });
@@ -96,6 +100,10 @@ const cartOrderSchema = new mongoose.Schema({
     purchasedAt: {
         type: Date,
         default: Date.now,
+    },
+    markAsComplete: {
+        type: Boolean,
+        default: false,
     },
 }, { timestamps: true });
 

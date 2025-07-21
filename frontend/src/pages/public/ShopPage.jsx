@@ -32,11 +32,9 @@ const ProductCard = ({ product }) => {
                 <h3 className="text-xl font-bold font-serif">{product.name}</h3>
 
                 <div className="mt-4 flex justify-between items-center">
-                    {/* {isOutOfStock ? (
+                    {isOutOfStock && (
                         <span className="font-bold text-sm uppercase tracking-wider bg-red-600 px-3 py-1 rounded-full">Sold Out</span>
-                    ) : (
-                        <p className="text-2xl font-bold font-serif">${product.price.toFixed(2)}</p>
-                    )} */}
+                    )}
 
                     <div
                         className="text-primary-text w-full text-center bg-white font-semibold py-2 px-5 rounded-full transition-transform duration-300 transform translate-y-4 group-hover:translate-y-0"

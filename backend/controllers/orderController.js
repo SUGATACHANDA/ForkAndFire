@@ -247,9 +247,42 @@ const getOrderByTransactionId = asyncHandler(async (req, res) => {
     res.json({ type: "cart", order: cartOrder });
 });
 
+const markOrderAsComplete = async (req, res) => {
+    const { type, id } = req.params;
+
+    try {
+        let order;
+
+        if (type === 'single') {
+            order = await Order.findById(id);
+        } else if (type === 'cart') {
+            order = await CartOrder.findById(id);
+        } else {
+            return res.status(400).json({ message: 'Invalid order type' });
+        }
+
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        order.markAsComplete = true;
+        await order.save();
+
+        res.status(200).json({
+            message: `${type === 'single' ? 'Single order' : 'Cart order'} marked as complete successfully`,
+            order,
+        });
+    } catch (error) {
+        console.error('Error marking order as complete:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+
 module.exports = {
     getMyOrders,
     getAllOrders,
     getOrderByTransactionId,
     getMyCartOrders,
+    markOrderAsComplete
 };

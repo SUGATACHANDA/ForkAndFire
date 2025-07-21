@@ -14,6 +14,8 @@ import WelcomePreloader from '../../components/ui/WelcomePreloader';
 // Import Static Images
 import chefPortrait from '../../assets/images/chef-portrait.jpeg';
 import aboutBg from '../../assets/images/about-bg.jpeg';
+import { Link } from 'react-router-dom';
+import ProductCard from '../../components/products/ProductCard';
 
 // Register GSAP Plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -23,6 +25,7 @@ const HomePage = () => {
     const [latestRecipes, setLatestRecipes] = useState([]);
     const [featuredCategories, setFeaturedCategories] = useState([]);
     const [isApiLoading, setIsApiLoading] = useState(true);
+    const [shopProducts, setShopProducts] = useState([]);
 
     // This state controls the visibility of the one-time welcome preloader.
     // It initializes its value by checking sessionStorage once.
@@ -38,12 +41,14 @@ const HomePage = () => {
         setIsApiLoading(true);
         const fetchData = async () => {
             try {
-                const [recipesRes, categoriesRes] = await Promise.all([
+                const [recipesRes, categoriesRes, productsRes] = await Promise.all([
                     API.get('/api/recipes?limit=6'),
                     API.get('/api/categories?limit=3'),
+                    API.get('/api/products?limit=2'),
                 ]);
                 setLatestRecipes(recipesRes.data);
                 setFeaturedCategories(categoriesRes.data);
+                setShopProducts(productsRes.data);
             } catch (error) {
                 console.error("Failed to fetch homepage data:", error);
             } finally {
@@ -160,6 +165,35 @@ const HomePage = () => {
                                     <div key={recipe._id} className="stagger-card"><RecipeCard recipe={recipe} /></div>
                                 ))
                             )}
+                        </div>
+                    </div>
+                </section>
+
+                <section id="shop-highlights" className="py-20 bg-background">
+                    <div className="container mx-auto px-6 items-center text-center">
+                        <AnimatedTitle>From Our Shop</AnimatedTitle>
+                        <p className="mt-4 text-lg text-secondary-text max-w-2xl mx-auto">
+                            A curated collection of goods and digital cookbooks to bring the spirit of Fork & Fire into your own kitchen.
+                        </p>
+
+                        <div className="stagger-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+                            {isApiLoading ? (
+                                <div className="col-span-full"><Loader /></div>
+                            ) : shopProducts.length > 0 ? (
+                                shopProducts.map(product => (
+                                    <div key={product._id} className="product-card-container">
+                                        <ProductCard product={product} />
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="col-span-full text-secondary-text">The shop is currently empty. Check back soon!</p>
+                            )}
+                        </div>
+
+                        <div className="mt-16">
+                            <Link to="/shop" className="inline-block bg-primary-text text-white font-bold tracking-wide uppercase px-8 py-3 rounded-full text-sm hover:bg-opacity-80 transition-all duration-300">
+                                Visit The Full Store
+                            </Link>
                         </div>
                     </div>
                 </section>

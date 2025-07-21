@@ -22,10 +22,12 @@ const {
     getMyOrders,
     getAllOrders,
     getOrderByTransactionId,
-    getMyCartOrders
+    getMyCartOrders,
+    markOrderAsComplete
 } = require('../controllers/orderController.js');
 
 const { protect, admin } = require('../middleware/authMiddleware.js');
+const { Order } = require('../models/orderModel.js');
 
 // --- User: Get all their orders (single + cart) ---
 router.get('/my-orders', protect, getMyOrders);
@@ -37,5 +39,7 @@ router.get('/all-orders', protect, admin, getAllOrders);
 router.get('/by-transaction/:transactionId', protect, getOrderByTransactionId);
 
 router.get('/my-cart-orders', protect, getMyCartOrders);
+
+router.put('/:type/:id/complete', protect, admin, markOrderAsComplete);
 
 module.exports = router;

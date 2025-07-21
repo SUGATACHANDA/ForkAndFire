@@ -4,7 +4,20 @@ import Loader from '../../components/common/Loader';
 import Pagination from '../../components/common/Pagination';
 import { Link } from 'react-router-dom';
 
-const OrderModal = ({ order, onClose }) => {
+const OrderModal = ({ order, onClose, onComplete }) => {
+    const [loading, setLoading] = useState(false);
+
+    const handleComplete = async () => {
+        try {
+            setLoading(true);
+            await onComplete(order); // call the function from parent
+            setLoading(false);
+            onClose(); // optional: close the modal after marking complete
+        } catch (err) {
+            console.error("Error marking order complete:", err);
+            setLoading(false);
+        }
+    };
     useEffect(() => {
         document.body.classList.add("modal-open", "overflow-hidden");
         return () => {
@@ -74,6 +87,17 @@ const OrderModal = ({ order, onClose }) => {
                         </div>
                     )}
                 </div>
+                {!order.markAsComplete && (
+                    <div className="border-t p-4 flex justify-center">
+                        <button
+                            onClick={handleComplete}
+                            disabled={loading}
+                            className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full"
+                        >
+                            {loading ? "Marking..." : "Mark as Complete"}
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );
@@ -86,12 +110,14 @@ const OrderRow = React.memo(({ order, onView }) => {
             currency: currency || 'USD',
         }).format((amount || 0) / 100);
 
+    const isNew = Date.now() - new Date(order.purchasedAt).getTime() < 86400000;
+
     return (
         <tr className="border-b border-gray-200 hover:bg-gray-50 transition-colors text-sm">
             <td className="px-4 py-3 font-mono text-xs text-gray-800">
                 <div className="flex items-center gap-2">
                     <p className="text-sm font-medium">{order.orderId}</p>
-                    {Date.now() - new Date(order.purchasedAt).getTime() < 86400000 && (
+                    {(!order.markAsComplete && isNew) && (
                         <img
                             src="/assets/new-badge.gif"
                             alt="New"
@@ -112,12 +138,14 @@ const OrderRow = React.memo(({ order, onView }) => {
                 <div className="text-xs text-gray-500">{order.user?.email || 'N/A'}</div>
             </td>
             <td className="px-4 py-3">
-                <button
-                    onClick={() => onView(order)}
-                    className="text-sm text-white p-2 rounded-md bg-accent hover:opacity-90"
-                >
-                    View Order
-                </button>
+                <div className="flex gap-2">
+                    <button
+                        onClick={() => onView(order)}
+                        className="text-sm text-white p-2 rounded-md bg-accent hover:opacity-90"
+                    >
+                        View Order
+                    </button>
+                </div>
             </td>
             <td className="px-4 py-3 font-semibold text-green-700">
                 {formatPrice(order.displayPrice, order.currency)}
@@ -169,6 +197,15 @@ const ManageOrdersPage = () => {
     useEffect(() => {
         fetchOrders();
     }, [fetchOrders]);
+
+    const handleMarkComplete = async (order) => {
+        try {
+            await API.put(`/api/orders/${order.type}/${order._id}/complete`);
+            fetchOrders();
+        } catch (err) {
+            console.error("Failed to mark order as complete:", err);
+        }
+    };
 
     return (
         <div className="space-y-6 p-4 md:p-8 max-w-screen-xl mx-auto">
@@ -252,17 +289,10 @@ const ManageOrdersPage = () => {
                                     key={order._id}
                                     order={order}
                                     onView={(order) => setSelectedOrder(order)}
+                                    onMarkComplete={handleMarkComplete}
                                 />
                             ))
                         )}
-
-                        {/* {orders.length > 0 && !loading && (
-                            <tr>
-                                <td className='py-10 text-center' colSpan='6'>
-                                    <Loader />
-                                </td>
-                            </tr>
-                        )} */}
                     </tbody>
                 </table>
 
@@ -271,15 +301,13 @@ const ManageOrdersPage = () => {
                 )}
             </div>
 
-            {/* {loading && <div className="flex justify-center py-10"><Loader /></div>} */}
-
             {error && (
                 <div className="text-red-600 text-sm p-4 bg-red-100 border border-red-300 rounded-md">
                     {error}
                 </div>
             )}
 
-            {selectedOrder && <OrderModal order={selectedOrder} onClose={() => setSelectedOrder(null)} />}
+            {selectedOrder && <OrderModal order={selectedOrder} onComplete={handleMarkComplete} onClose={() => setSelectedOrder(null)} />}
         </div>
     );
 };

@@ -256,7 +256,7 @@ const AdminDashboard = () => {
                                                 <div className="text-sm">
                                                     <div className="flex items-center gap-2">
                                                         <p className="font-semibold text-gray-900">{o.user?.name}</p>
-                                                        {Date.now() - new Date(o.purchasedAt).getTime() < 86400000 && (
+                                                        {Date.now() - new Date(o.purchasedAt).getTime() < 86400000 && !o.markAsComplete && (
                                                             <img
                                                                 src="/assets/new-badge.gif"
                                                                 alt="New"
