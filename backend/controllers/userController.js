@@ -4,7 +4,11 @@ const User = require('../models/userModel.js');
 const Recipe = require('../models/recipeModel.js');
 const Newsletter = require('../models/newsletterModel.js');
 const sendEmail = require('../utils/sendMail.js');
-const asyncHandler = require('express-async-handler');
+const jwt = require('jsonwebtoken');
+const resetPasswordEmailTemplate = require('../utils/generateResetEmailTemplate.js');
+
+const dotenv = require('dotenv');
+dotenv.config();
 
 // @desc    Auth user & get token
 // @route   POST /api/users/login
@@ -140,18 +144,14 @@ const forgotPassword = asyncHandler(async (req, res) => {
 
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
 
-    const message = `
-        <h1>Password Reset Requested</h1>
-        <p>Please click the link below to reset your password (valid for 15 minutes):</p>
-        <a href="${resetUrl}" clicktracking="off">${resetUrl}</a>
-        <p>If you did not request this, you can ignore this email.</p>
-    `;
+    const htmlTemplate = resetPasswordEmailTemplate(resetUrl, user.name)
+
 
     try {
         await sendEmail({
             to: user.email,
             subject: 'Fork & Fire - Password Reset',
-            html: message
+            html: htmlTemplate
         });
 
         res.status(200).json({

@@ -22,7 +22,7 @@ const NewsletterModal = () => {
     // Effect to control modal visibility based on sessionStorage
     useEffect(() => {
         // Define routes where the modal should NOT appear
-        const excludedPaths = ['/admin', '/print', '/unsubscribe', '/login', '/signup', '/subscribe'];
+        const excludedPaths = ['/admin', '/print', '/unsubscribe', '/login', '/signup', '/subscribe', '/login', 'forgot-password', '/reset-password'];
         if (excludedPaths.some(path => location.pathname.startsWith(path))) {
             setIsOpen(false); // Ensure it's closed if we navigate to an excluded path
             return;
