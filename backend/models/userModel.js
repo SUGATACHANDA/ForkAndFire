@@ -13,6 +13,8 @@ const userSchema = mongoose.Schema({
         ref: 'Product',
         default: [] // Prevents undefined errors
     },
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Date },
 }, { timestamps: true });
 
 // Password hashing middleware

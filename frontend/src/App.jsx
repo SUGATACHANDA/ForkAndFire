@@ -50,6 +50,8 @@ import PurchaseSuccessPage from './pages/public/PurchaseSuccessPage';
 import PurchaseProcessingPage from './pages/public/PurchaseProcessingPage';
 import ManageOrdersPage from './pages/admin/ManageOrdersPage';
 import CartPage from './pages/user/CartPage';
+import ForgotPasswordPage from './pages/public/ForgotPasswordPage';
+import ResetPasswordPage from './pages/public/ResetPasswordPage';
 
 function App() {
   // No more `useLocation` or conditional logic for header/footer here!
@@ -108,6 +110,8 @@ function App() {
         <Route path="/print/recipe/:id" element={<PrintRecipePage />} />
         <Route path="/purchase-redirect" element={<PurchaseRedirectPage />} />
         <Route path="/purchase-success" element={<PurchaseSuccessPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         {/* <Route path="/purchase-processing" element={<PurchaseProcessingPage />} /> */}
 
 
