@@ -11,9 +11,28 @@ const ForgotPasswordPage = () => {
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [userExists, setUserExists] = useState(null);
 
     // This state controls which view is shown: the form or the success message.
     const [isSuccess, setIsSuccess] = useState(false);
+
+    const handleEmailChange = async (e) => {
+        const email = e.target.value;
+        setEmail(email);
+
+        // Basic email format check before making request
+        if (email.includes('@') && email.length > 5) {
+            try {
+                const res = await API.post('/api/users/check-user-exists', { email });
+                setUserExists(res.data.exists);
+            } catch (err) {
+                console.error('Error checking user existence:', err);
+                setUserExists(null); // Unknown state
+            }
+        } else {
+            setUserExists(null); // Reset if invalid format
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -31,6 +50,7 @@ const ForgotPasswordPage = () => {
             setLoading(false);
         }
     };
+
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-50 py-12 px-4">
@@ -72,14 +92,20 @@ const ForgotPasswordPage = () => {
                                     name="email"
                                     type="email"
                                     value={email}
-                                    onChange={e => setEmail(e.target.value)}
+                                    onChange={handleEmailChange}
                                     required
                                     placeholder="your.email@example.com"
                                 />
+                                {userExists === true && (
+                                    <p className="text-green-600 mt-1 text-sm">✅ Account found for this email.</p>
+                                )}
+                                {userExists === false && (
+                                    <p className="text-red-500 mt-1 text-sm">⚠️ No account found with this email.</p>
+                                )}
                             </div>
 
-                            <Button type="submit" disabled={loading} fullWidth={true}>
-                                {loading && <FontAwesomeIcon icon={faSpinner} spin className="mr-2" />}
+                            <Button type="submit" disabled={loading || !userExists} fullWidth={true}>
+                                {loading && <FontAwesomeIcon icon={faSpinner} spin className="mr-1 mt-1" />}
                                 {loading ? "Sending..." : "Send Reset Link"}
                             </Button>
                         </form>

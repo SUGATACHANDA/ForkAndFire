@@ -8,7 +8,7 @@
 const resetPasswordEmailTemplate = (resetUrl, userName = "there") => {
     // === YOUR ORIGINAL LOGIC AND FUNCTIONS REMAIN UNTOUCHED ===
     const currentYear = new Date().getFullYear();
-    const expiryTime = "15 minutes"; // Make sure this matches your backend controller's logic
+    const expiryTime = "5 minutes"; // Make sure this matches your backend controller's logic
 
     // === THE NEW, REDESIGNED HTML AND INLINE CSS ===
     return `

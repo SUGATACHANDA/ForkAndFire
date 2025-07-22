@@ -15,6 +15,10 @@ const userSchema = mongoose.Schema({
     },
     resetPasswordToken: { type: String },
     resetPasswordExpires: { type: Date },
+    resetTokenUsed: {
+        type: Boolean,
+        default: false
+    }
 }, { timestamps: true });
 
 // Password hashing middleware
